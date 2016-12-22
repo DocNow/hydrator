@@ -1,13 +1,13 @@
 {
-  "name": "electron-react-boilerplate",
-  "productName": "electron-react-boilerplate",
-  "version": "1.0.0",
-  "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
+  "name": "Hydrator",
+  "productName": "hydrator",
+  "description": "A desktop utility to hydrate Twitter ID datasets.",
+  "version": "0.0.2",
   "main": "./main.js",
   "author": {
-    "name": "C. T. Lin",
-    "email": "chentsulin@gmail.com",
-    "url": "https://github.com/chentsulin"
+    "name": "Ed Summers",
+    "email": "ehs@pobox.com",
+    "url": "http://inkdroid.org"
   },
   "license": "MIT",
   "dependencies": {
