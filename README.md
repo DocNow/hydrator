@@ -1,4 +1,5 @@
-<img width="100" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/app.png" /> 
+<img width="100" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/images/app.png"
+/> 
 
 Hydrator is an [Electron] based desktop application for [hydrating] a
 Twitter ID dataset. Twitter's Terms of Service do not allow the full JSON
