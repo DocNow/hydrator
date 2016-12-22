@@ -13,7 +13,7 @@ This is (obviously) a work in progress. If you are interested in learning more p
 These are very early versions. Be prepared for clunkiness and bugs.
 
 * [OS X]
-* Windows (soon)
+* [Windows]
 * Linux (soon)
 
 ## Develop
@@ -46,4 +46,6 @@ documentation for more information about commands that are available.
 [Slack]: https://docnowteam.slack.com
 [electron-react-boilerplate]: https://github.com/chentsulin/electron-react-boilerplate
 [hydrating]: https://medium.com/on-archivy/on-forgetting-e01a2b95272#.lrkof12q5
-[OS X]: https://s3.amazonaws.com/docnow-web/Hydrator.dmg
+
+[OS X]: https://s3.amazonaws.com/docnow-web/Hydrator-0.0.2.dmg
+[Windows]: https://s3.amazonaws.com/docnow-web/Hydrator Setup 0.0.2.exe
