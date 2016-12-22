@@ -10,11 +10,11 @@ This is (obviously) a work in progress. If you are interested in learning more p
 
 ## Prebuilt Versions
 
-These are very early versions. Be prepared for clunkiness and bugs.
+v0.0.2 
 
 * [OS X]
 * [Windows]
-* Linux (soon)
+* [Linux]
 
 ## Develop
 
@@ -49,3 +49,4 @@ documentation for more information about commands that are available.
 
 [OS X]: https://s3.amazonaws.com/docnow-web/Hydrator-0.0.2.dmg
 [Windows]: https://s3.amazonaws.com/docnow-web/Hydrator-Setup-0.0.2.exe
+[Linux]: https://s3.amazonaws.com/docnow-web/Hydrator_0.0.2_amd64.deb

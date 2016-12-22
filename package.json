@@ -45,6 +45,7 @@
       ]
     },
     "files": [
+      "images/",
       "dist/",
       "node_modules/",
       "app.html",
