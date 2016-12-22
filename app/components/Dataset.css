@@ -1,0 +1,51 @@
+.container {
+  font-size: 12pt;
+  margin-bottom: 10px;
+}
+
+.container a {
+  font-size: 12pt;
+  text-decoration: none;
+  color: black;
+}
+
+.container .title {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.container .bar {
+  line-height: 23px;
+  width: 60%;
+  margin-right: 10px;
+  float: left;
+  border: thin solid #aaa;
+}
+
+.container .progress {
+  background-color: lightblue;
+  font-size: 9pt;
+  white-space: nowrap;
+}
+
+.container .complete {
+  background-color: lightgreen;
+  font-size: 9pt;
+  white-space: nowrap;
+}
+
+.container button {
+  margin-left: 10px;
+  line-height: 10pt;
+  font-size: 9pt;
+  font-weight: bold;
+  background-color: #eee;
+}
+
+.container .stop {
+  background-color: pink;
+}
+
+.container .start {
+  background-color: lightgreen;
+}

@@ -1,0 +1,15 @@
+.container {
+}
+
+.container input {
+  width: auto;
+}
+
+.container .keys {
+  overflow-wrap: nowrap; 
+  font-size: smaller;
+}
+
+.container .reset {
+    color: red;
+}

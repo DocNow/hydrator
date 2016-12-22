@@ -4,11 +4,11 @@ import { hashHistory } from 'react-router';
 import { routerMiddleware, push } from 'react-router-redux';
 import createLogger from 'redux-logger';
 import rootReducer from '../reducers';
+import { electronEnhancer } from 'redux-electron-store';
+import autosave from '../middleware/autosave'
 
-import * as counterActions from '../actions/counter';
 
 const actionCreators = {
-  ...counterActions,
   push,
 };
 
@@ -21,6 +21,10 @@ const router = routerMiddleware(hashHistory);
 
 // If Redux DevTools Extension is installed use it, otherwise use Redux compose
 /* eslint-disable no-underscore-dangle */
+if (typeof window == 'undefined') {
+  var window = {}
+}
+
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
     // Options: http://zalmoxisus.github.io/redux-devtools-extension/API/Arguments.html
@@ -29,7 +33,8 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
   compose;
 /* eslint-enable no-underscore-dangle */
 const enhancer = composeEnhancers(
-  applyMiddleware(thunk, router, logger)
+  applyMiddleware(thunk, router, logger, autosave),
+  electronEnhancer()
 );
 
 export default function configureStore(initialState: Object | void) {

@@ -1,0 +1,7 @@
+.container {
+}
+
+.container .selectedFile {
+    font-style: italic;
+    font-size: 12pt;
+}
