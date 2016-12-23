@@ -1,13 +1,14 @@
 <img width="100" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/images/app.png"
 /> 
 
-Hydrator is an [Electron] based desktop application for [hydrating] a
-Twitter ID dataset. Twitter's Terms of Service do not allow the full JSON
-for tweets to be distributed to third parties. However they do allow datasets
-of tweet IDs to be distributed. Hydrator helps you turn these tweet IDs 
-back into JSON from the comfort of your desktop.
+Hydrator is an [Electron] based desktop application for [hydrating] Twitter ID
+datasets. Twitter's Terms of Service do not allow the full JSON for datasets of
+tweets to be distributed to third parties. However they do allow datasets of
+tweet IDs to be shared. Hydrator helps you turn these tweet IDs back into JSON
+from the comfort of your desktop.
 
-This is (obviously) a work in progress. If you are interested in learning more please join us in [Slack].
+If you are interested in learning more please join the DocNow community in
+[Slack], or add an issue ticket here.
 
 ## Prebuilt Versions
 
