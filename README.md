@@ -32,15 +32,11 @@ Start a hot-swappable development server:
 
     npm run dev
 
-Or package it all up as a desktop app:
+Create installers for OS X, Windows and Linux:
 
-    npm run package 
+    npm run package-all
 
-And create an OS X installer:
-
-    npm run build-dmg
-
-Hydrator was created using [electron-react-boilerplate] so check out that 
+Hydrator was created using [electron-react-boilerplate] so check out that
 documentation for more information about commands that are available.
 
 [Electron]: http://electron.atom.io/
