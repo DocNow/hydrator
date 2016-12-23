@@ -13,7 +13,6 @@
   "dependencies": {
     "csv-write-stream": "^2.0.0",
     "numeraljs": "^1.5.6",
-    "redux-electron-store": "^0.3.11",
     "twit": "^2.2.4",
     "twitter-pin-auth": "^0.1.2"
   }

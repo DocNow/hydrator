@@ -157,11 +157,9 @@
     "webpack-validator": "^2.3.0"
   },
   "dependencies": {
-    "csv-write-stream": "^2.0.0",
     "electron-debug": "^1.1.0",
     "electron-json-storage": "^2.1.0",
     "font-awesome": "^4.7.0",
-    "numeraljs": "^1.5.6",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "react-redux": "^5.0.1",
@@ -171,11 +169,8 @@
     "redux-devtools": "^3.3.1",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.1.1",
-    "redux-electron-store": "^0.4.1",
     "redux-thunk": "^2.1.0",
-    "source-map-support": "^0.4.6",
-    "twit": "^2.2.5",
-    "twitter-pin-auth": "^0.2.0"
+    "source-map-support": "^0.4.6"
   },
   "devEngines": {
     "node": ">=6.x",

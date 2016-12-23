@@ -1,7 +1,6 @@
 import { appendFile } from 'fs'
 import { app, BrowserWindow, Menu, shell, ipcMain } from 'electron';
 import storage from 'electron-json-storage';
-import configureStore from './store/configureStore';
 
 let menu;
 let template;
@@ -46,8 +45,6 @@ app.on('ready', async () => {
 
   storage.get('state', (err, data) => {
 
-    const store = configureStore(data);
-
     mainWindow = new BrowserWindow({
       show: false,
       width: 500,
@@ -61,10 +58,18 @@ app.on('ready', async () => {
       mainWindow.focus();
     });
 
-    ipcMain.on('autosave', (event, arg) => {
-      let state = store.getState()
-      storage.set('state', state, (error) => {
-        if (error) throw error
+    ipcMain.on('getSavedStore', (event, arg) => {
+      storage.get('state', (err, data) => {
+        event.returnValue = data
+      })
+    })
+
+    ipcMain.on('autosave', (event, store) => {
+      storage.set('state', store, (error) => {
+        if (error) {
+          console.log(error)
+          throw error
+        }
       })
     })
 

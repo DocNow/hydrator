@@ -2,13 +2,18 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, hashHistory } from 'react-router';
-import { syncHistoryWithStore } from 'react-router-redux';
+import { syncHistoryWithStore } from 'react-router-redux'
+import { ipcRenderer } from 'electron'
 import routes from './routes';
-import configureStore from './store/configureStore';
+import configureStore from './store/configureStore'
 import {heartbeat} from './actions/dataset'
 import './app.global.css';
 
-const store = configureStore();
+const savedStore = ipcRenderer.sendSync('getSavedStore')
+console.log("got store", savedStore)
+
+const store = configureStore(savedStore);
+
 const history = syncHistoryWithStore(hashHistory, store);
 
 // start the heartbeat

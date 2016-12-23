@@ -12,15 +12,7 @@ export default class App extends Component {
       <div>
         <Menu />
         <div id="content">
-        {this.props.children}
-        {
-          (() => {
-            if (process.env.NODE_ENV !== 'production') {
-              const DevTools = require('./DevTools'); // eslint-disable-line global-require
-              return <DevTools />;
-            }
-          })()
-        }
+          {this.props.children}
         </div>
       </div>
     );
