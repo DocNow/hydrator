@@ -4,7 +4,8 @@ export const ADD_DATASET = 'ADD_DATASET'
 export const DELETE_DATASET = 'DELETE_DATASET'
 export const CHOOSE_FILE = 'CHOOSE_FILE'
 export const UNCHOOSE_FILE = 'UNCHOOSE_FILE'
-export const CHECK_FILE = 'CHECK_FILE'
+export const START_CHECK_FILE = 'START_CHECK_FILE'
+export const STOP_CHECK_FILE = 'STOP_CHECK_FILE'
 export const SET_NUM_TWEET_IDS = 'SET_NUM_TWEET_IDS'
 export const SET_FILE_CHECK_ERROR = 'SET_FILE_CHECK_ERROR'
 export const PREP_DATASET = 'PREP_DATASET'
@@ -54,13 +55,30 @@ export function unchooseFile() {
 
 export function checkFile(path) {
   return function(dispatch, getState) {
+    dispatch(startCheckFile())
     checkTweetIdFile(path)
-      .then(function(numTweetIds) {dispatch(setNumTweetIds(numTweetIds))})
+      .then(function(numTweetIds) {
+        dispatch(setNumTweetIds(numTweetIds))
+        dispatch(stopCheckFile())
+      })
       .catch(function(error) {
         var {dialog} = require('electron').remote
         dialog.showErrorBox("Tweet ID File Error", error)
         dispatch(setFileCheckError(error))
+        dispatch(stopCheckFile())
       })
+  }
+}
+
+export function startCheckFile() {
+  return {
+    type: START_CHECK_FILE
+  }
+}
+
+export function stopCheckFile() {
+  return {
+    type: STOP_CHECK_FILE
   }
 }
 

@@ -1,5 +1,6 @@
 import { CHOOSE_FILE, UNCHOOSE_FILE, SET_NUM_TWEET_IDS, SET_FILE_CHECK_ERROR, 
-         ADD_DATASET, PREP_DATASET } from '../actions/dataset'
+  ADD_DATASET, START_CHECK_FILE, STOP_CHECK_FILE, PREP_DATASET } 
+  from '../actions/dataset'
 
 import { FACTORY_RESET } from '../actions/settings'
 
@@ -27,6 +28,20 @@ export default function newDataset(state = initialState, action) {
         ...state,
         selectedFile: null,
         numTweetIds: null
+      }
+    }
+
+    case START_CHECK_FILE: {
+      return {
+        ...state,
+        checkingFile: true
+      }
+    }
+
+    case STOP_CHECK_FILE: {
+      return {
+        ...state,
+        checkingFile: false
       }
     }
 

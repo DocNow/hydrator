@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import styles from './AddDataset.css'
 import CommaNumber from './CommaNumber'
+import { basename } from 'path'
 
 const {dialog} = require('electron').remote
 
@@ -17,11 +18,11 @@ var FileStats = (props) => {
         <div><CommaNumber value={ props.numTweetIds } /></div>
       </div>
     )
-  } else if (props.selectedFile) {
+  } else if (props.checkingFile) {
+    var filename = basename(props.selectedFile)
     return(
-      <div>
-        <br />
-        <div><em>Verifying { props.selectedFile } ... </em></div>
+      <div className={styles.verifying}>
+        Verifying { filename } ...
       </div>
     )
   } else {
@@ -46,9 +47,14 @@ export default class AddDataset extends Component {
   }
 
   render() {
+
+    // can't add dataset while it is being checked
+    var disabled = this.props.checkingFile == true
+
     return (
       <div>
         <div className={styles.container}>
+
           <details open>
             <summary>Add a New Dataset</summary>
             <p>
@@ -57,12 +63,20 @@ export default class AddDataset extends Component {
               your new dataset.
             </p>
           </details>
+
           <form onSubmit={(e) => {
             e.preventDefault()
-            this.props.addDataset(this.props.selectedFile, this.props.numTweetIds, title.value, creator.value, publisher.value, url.value)
+            this.props.addDataset(
+              this.props.selectedFile,
+              this.props.numTweetIds,
+              title.value,
+              creator.value,
+              publisher.value,
+              url.value)
             this.props.router.push("/datasets") 
           }}> 
-            <button onClick={ (e) => {
+
+            <button disabled={disabled} onClick={ (e) => {
               this.props.unchooseFile()
               let files = dialog.showOpenDialog()
               if (files && files.length == 1) {
@@ -70,20 +84,57 @@ export default class AddDataset extends Component {
                 this.props.checkFile(files[0])
               }
             }}>Select Tweet ID file</button>
+
             <br />
-            <FileStats numTweetIds={this.props.numTweetIds} selectedFile={this.props.selectedFile} />
+
+            <FileStats
+              checkingFile={this.props.checkingFile} 
+              numTweetIds={this.props.numTweetIds}
+              selectedFile={this.props.selectedFile} />
+            
             <br />
+
             <label htmlFor="title">Title:</label>
-            <input id="title" name="title" type="text" onChange={ this.props.prepDataset } value={ this.props.title } required></input>
+            <input
+              required="true"
+              id="title"
+              name="title"
+              type="text"
+              onChange={ this.props.prepDataset }
+              value={ this.props.title }>
+            </input>
+
             <label htmlFor="creator">Creator:</label>
-            <input id="creator" name="creator" type="text" onChange={ this.props.prepDataset } value={ this.props.creator }></input>
+            <input
+              id="creator" 
+              name="creator" 
+              type="text" 
+              onChange={ this.props.prepDataset } 
+              value={ this.props.creator }>
+            </input>
+
             <label htmlFor="publisher">Publisher:</label>
-            <input id="publisher" name="publisher" type="text" onChange={ this.props.prepDataset } value={ this.props.publisher }></input>
+            <input 
+              id="publisher"
+              name="publisher"
+              type="text"
+              onChange={ this.props.prepDataset }
+              value={ this.props.publisher }>
+            </input>
+
             <label htmlFor="url">URL:</label>
-            <input id="url" name="url" type="url" onChange={ this.props.prepDataset } value={ this.props.url }></input>
+            <input
+              id="url"
+              name="url"
+              type="url"
+              onChange={ this.props.prepDataset }
+              value={ this.props.url }>
+            </input>
+
             <br />
             <br />
-            <button>Add Dataset</button>
+
+            <button disabled={disabled}>Add Dataset</button>
           </form>
         </div>
       </div>
