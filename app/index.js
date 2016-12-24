@@ -17,7 +17,7 @@ const store = configureStore(savedStore);
 const history = syncHistoryWithStore(hashHistory, store);
 
 // start the heartbeat
-setInterval(() => store.dispatch(heartbeat()), 1000)
+setInterval(() => store.dispatch(heartbeat()), 500)
 
 render(
   <Provider store={store}>
