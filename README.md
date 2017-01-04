@@ -33,7 +33,11 @@ Start a hot-swappable development server:
 
     npm run dev
 
-Create installers for OS X, Windows and Linux:
+Create an installer for your current OS:
+
+    npm run package
+
+Alternatively, create installers for OS X, Windows and Linux:
 
     npm run package-all
 
