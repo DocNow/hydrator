@@ -48,7 +48,3 @@ documentation for more information about commands that are available.
 [Slack]: https://docnowteam.slack.com
 [electron-react-boilerplate]: https://github.com/chentsulin/electron-react-boilerplate
 [hydrating]: https://medium.com/on-archivy/on-forgetting-e01a2b95272#.lrkof12q5
-
-[OS X]: https://s3.amazonaws.com/docnow-web/Hydrator-0.0.2.dmg
-[Windows]: https://s3.amazonaws.com/docnow-web/Hydrator-Setup-0.0.2.exe
-[Linux]: https://s3.amazonaws.com/docnow-web/Hydrator_0.0.2_amd64.deb
