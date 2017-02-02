@@ -14,9 +14,9 @@ If you are interested in learning more please join the DocNow community in
 
 v0.0.2 
 
-* [OS X]
-* [Windows]
-* [Linux]
+* [OS X](https://s3.amazonaws.com/docnow-web/Hydrator-0.0.2.dmg)
+* [Windows](https://s3.amazonaws.com/docnow-web/Hydrator-Setup-0.0.2.exe)
+* [Linux](https://s3.amazonaws.com/docnow-web/Hydrator_0.0.2_amd64.deb)
 
 ## Develop
 
