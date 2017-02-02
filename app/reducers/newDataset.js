@@ -56,7 +56,8 @@ export default function newDataset(state = initialState, action) {
       return {
         ...state,
         selectedFile: null,
-        lineCount: null
+        lineCount: null,
+        checkingFile: false
       }
     }
 
