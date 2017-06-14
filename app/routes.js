@@ -6,7 +6,6 @@ import DatasetPage from  './containers/DatasetPage'
 import AddDatasetPage from './containers/AddDatasetPage'
 import SettingsPage from './containers/SettingsPage'
 
-
 export default (
   <Route path="/" component={App}>
     <IndexRoute component={DatasetsPage} />
