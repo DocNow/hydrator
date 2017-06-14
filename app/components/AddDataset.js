@@ -49,7 +49,8 @@ export default class AddDataset extends Component {
   render() {
 
     // can't add dataset while it is being checked
-    var disabled = this.props.checkingFile == true
+    var addDisabled =  this.props.checkingFile == true || ! this.props.selectedFile
+    var selectDisabled = this.props.checkingFile == true
 
     return (
       <div>
@@ -76,7 +77,7 @@ export default class AddDataset extends Component {
             this.props.router.push("/datasets") 
           }}> 
 
-            <button disabled={disabled} onClick={ (e) => {
+            <button disabled={selectDisabled} onClick={ (e) => {
               this.props.unchooseFile()
               let files = dialog.showOpenDialog()
               if (files && files.length == 1) {
@@ -134,7 +135,7 @@ export default class AddDataset extends Component {
             <br />
             <br />
 
-            <button disabled={disabled}>Add Dataset</button>
+            <button disabled={addDisabled}>Add Dataset</button>
           </form>
         </div>
       </div>
