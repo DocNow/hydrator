@@ -1,4 +1,4 @@
-<img width="500" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/images/screencap.png"
+<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/images/screencap.png"
 /> 
 
 Hydrator is an [Electron] based desktop application for [hydrating] Twitter ID
