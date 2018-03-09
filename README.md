@@ -1,10 +1,5 @@
-<img width="100" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/images/app.png"
+<img width="500" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/images/screencap.png"
 /> 
-
-<div>
-<img style="float: left;" src="https://pbs.twimg.com/media/DV2oBjDVMAAvsUH.png">
-<img src="https://pbs.twimg.com/media/DV2oCRrVQAALbAU.png">
-</div>
 
 Hydrator is an [Electron] based desktop application for [hydrating] Twitter ID
 datasets. Twitter's Terms of Service do not allow the full JSON for datasets of
