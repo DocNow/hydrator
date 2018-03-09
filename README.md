@@ -2,7 +2,7 @@
 /> 
 
 <div>
-<img src="https://pbs.twimg.com/media/DV2oBjDVMAAvsUH.png">
+<img style="float: left;" src="https://pbs.twimg.com/media/DV2oBjDVMAAvsUH.png">
 <img src="https://pbs.twimg.com/media/DV2oCRrVQAALbAU.png">
 </div>
 
