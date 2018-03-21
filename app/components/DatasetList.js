@@ -1,19 +1,13 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router';
 import Dataset from './Dataset'
 import styles from './DatasetList.css';
 
-export default class DatasetList extends Component {
-
-  static propTypes = {
-    datasets: PropTypes.array.isRequired,
-    startHydration: PropTypes.func.isRequired,
-    stopHydration: PropTypes.func.isRequired
-  }
+class DatasetList extends Component {
 
   componentWillMount() { 
     if (this.props.datasets.length == 0) {
-      this.props.router.push("/add") 
+      this.props.history.push("/add") 
     }
   }
 
@@ -60,3 +54,5 @@ export default class DatasetList extends Component {
     )
   }
 }
+
+export default DatasetList

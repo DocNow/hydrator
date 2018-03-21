@@ -1,22 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router';
 import styles from './Settings.css';
 
 
 export default class Settings extends Component {
 
-  static propTypes = {
-    getTwitterAuthUrl: PropTypes.func.isRequired,
-    getTwitterCredentials: PropTypes.func.isRequired,
-    unsetTwitterAuthUrl: PropTypes.func.isRequired,
-    factoryReset: PropTypes.func.isRequired,
-    unsetSettingsReady: PropTypes.func.isRequired
-  }
-
   componentWillReceiveProps() {
     // if they've got their settings ready send them over to add a dataset
     if (this.props.settings.ready) {
-      this.props.router.push("/add")
+      this.props.history.push("/add")
       this.props.unsetSettingsReady()
     }
   }

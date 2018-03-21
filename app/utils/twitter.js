@@ -69,7 +69,7 @@ function fetchTweets(tweetIds, auth) {
   var ids = tweetIds.join(',')
   return new Promise(
     function(resolve, reject) {
-      twitter.post('/statuses/lookup', {id: ids})
+      twitter.post('/statuses/lookup', {id: ids, tweet_mode: 'extended'})
         .then(function(response) {
           var headers = response.resp.headers
           if (headers['x-rate-limit-remaining'] < 1) {
@@ -198,7 +198,7 @@ function csvRow(t) {
     retweetId(t),
     retweetScreenName(t),
     t.source,
-    t.text,
+    t.full_text,
     tweetUrl(t),
     u.created_at,
     u.screen_name,

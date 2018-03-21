@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import styles from './Menu.css';
 
 
@@ -9,9 +9,9 @@ export default class Menu extends Component {
       <div className={styles.container}>
         <ul>
           <li className="logo"><img src="./images/app.png" /></li>
-          <li><Link to="/datasets" activeClassName={styles.active}>Datasets</Link></li>
-          <li><Link to="/add" activeClassName={styles.active}>Add</Link></li>
-          <li><Link to="/settings" activeClassName={styles.active}>Settings</Link></li>
+          <li><NavLink to="/datasets" activeClassName={styles.active}>Datasets</NavLink></li>
+          <li><NavLink to="/add" activeClassName={styles.active}>Add</NavLink></li>
+          <li><NavLink to="/settings" activeClassName={styles.active}>Settings</NavLink></li>
         </ul>
       </div>
     );

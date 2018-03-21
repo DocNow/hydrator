@@ -3,11 +3,15 @@
   "productName": "hydrator",
   "description": "A desktop utility to hydrate Twitter ID datasets.",
   "version": "0.0.2",
-  "main": "./main.js",
+  "main": "./main.prod.js",
   "author": {
     "name": "Ed Summers",
     "email": "ehs@pobox.com",
     "url": "http://inkdroid.org"
+  },
+  "scripts": {
+    "electron-rebuild": "node -r babel-register ../internals/scripts/ElectronRebuild.js",
+    "postinstall": "npm run electron-rebuild"
   },
   "license": "MIT",
   "dependencies": {

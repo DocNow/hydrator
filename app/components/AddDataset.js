@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router'
 import styles from './AddDataset.css'
 import CommaNumber from './CommaNumber'
@@ -33,16 +33,9 @@ var FileStats = (props) => {
 
 export default class AddDataset extends Component {
 
-  static propTypes = {
-    chooseFile: PropTypes.func.isRequired,
-    checkFile: PropTypes.func.isRequired,
-    addDataset: PropTypes.func.isRequired,
-    prepDataset: PropTypes.func.isRequired,
-  }
-
   componentWillMount() { 
    if (! this.props.twitterAccessKey) {
-      this.props.router.push("/settings") 
+      this.props.history.push("/settings") 
     }
   }
 
@@ -74,7 +67,7 @@ export default class AddDataset extends Component {
               creator.value,
               publisher.value,
               url.value)
-            this.props.router.push("/datasets") 
+            this.props.history.push("/datasets") 
           }}> 
 
             <button disabled={selectDisabled} onClick={ (e) => {

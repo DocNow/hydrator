@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import styles from './Dataset.css'
 import CommaNumber from './CommaNumber'
 
@@ -38,12 +38,6 @@ var CsvButton = (props) => {
 }
 
 export default class Dataset extends Component {
-  static propTypes = {
-    startHydration: PropTypes.func.isRequired,
-    stopHydration: PropTypes.func.isRequired,
-    setOutputPath: PropTypes.func.isRequired
-  }
-
   render() {
     var button = null
     if (this.props.completed) {

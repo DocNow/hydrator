@@ -10,7 +10,7 @@ function mapStateToProps(state, routeState) {
   var props = {
     dataset: null
   }
-  var datasetId = routeState.params.datasetId
+  var datasetId = routeState.match.params.datasetId
   for (var d of state.datasets) {
     if (d.id == datasetId) {
       props.dataset = d

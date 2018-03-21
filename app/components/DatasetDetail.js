@@ -1,15 +1,10 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { Link } from 'react-router'
 import styles from './DatasetDetail.css'
 import numeral from 'numeraljs'
 import CommaNumber from './CommaNumber'
 
 export default class DatasetDetail extends Component {
-
-
-  static propTypes = {
-    // getTwitterAuthUrl: PropTypes.func.isRequired,
-  }
 
   render() {
     var d = this.props.dataset
