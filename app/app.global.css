@@ -19,24 +19,24 @@ details {
   margin-bottom: 10px;
 }
 
- form {
+form {
   padding: 5px; 
 }
 
- label {
+label {
   font-weight: bold;
 }
 
- input {
+input {
   font-size: 14pt;
   width: 100%;
   margin-bottom: 10px;
 }
 
- input[type="file"] { 
+input[type="file"] { 
   font-size: 14pt;
 }
 
- button {
+button {
   font-size: 100%;
 }

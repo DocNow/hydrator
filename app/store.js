@@ -17,32 +17,12 @@ const configureStore = (initialState) => {
     autosave
   ]
 
-  /*
-  if (process.env.NODE_ENV === 'development') {
-    const devToolsExtension = window.devToolsExtension
-
-    if (typeof devToolsExtension === 'function') {
-      enhancers.push(devToolsExtension())
-    }
-  }
-  */
-
   const composedEnhancers = composeWithDevTools(
     applyMiddleware(...middleware),
     ...enhancers
   )
 
-  // Create Store
-  const store = createStore(rootReducer, initialState, composedEnhancers);
-
-  /*
-  if (module.hot) {
-    module.hot.accept('./reducers', () =>
-      store.replaceReducer(require('./reducers'))); // eslint-disable-line global-require
-  }
-  */
-
-  return store;
+  return createStore(rootReducer, initialState, composedEnhancers);
 }
 
 export { configureStore, history }

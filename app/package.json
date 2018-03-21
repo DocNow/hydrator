@@ -2,7 +2,7 @@
   "name": "Hydrator",
   "productName": "hydrator",
   "description": "A desktop utility to hydrate Twitter ID datasets.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "./main.prod.js",
   "author": {
     "name": "Ed Summers",
