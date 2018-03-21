@@ -14,7 +14,7 @@ If you are interested in learning more please join the DocNow community in
 
 v0.0.3 
 
-- added extended tweet functionality
+This release adds extended tweet functionality.
 
 * [OS X](https://s3.amazonaws.com/docnow-web/Hydrator-0.0.3.dmg)
 * [Windows](https://s3.amazonaws.com/docnow-web/Hydrator-Setup-0.0.3.exe)
