@@ -22,12 +22,12 @@ Linux installers.
 **Note for OS X Users**
 
 Since the Hydrator has not been
-[signed](https://developer.apple.com/developer-id/) your initial start up of the
-Hydrator will be prevented, because the disk image has not been signed by a
-registered Apple developer. You can convince OS X to open it anyway by locating
-the Hydrator app in your *Applications* folder, control-clicking on it,
-selecting and then clicking *Open* (see the screenshot below). From this point
-on your Hydrator should start normally.
+[signed](https://developer.apple.com/developer-id/) (which requires us to pay
+Apple in order to register as a developer) your initial start up of the Hydrator
+will be prevented. You can convince OS X to open it anyway by locating the
+Hydrator app in your *Applications* folder, control-clicking on it, selecting
+and then clicking *Open* (see the screenshot below). From this point on your
+Hydrator should start normally.
 
 <img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/osx-open.png">
 
