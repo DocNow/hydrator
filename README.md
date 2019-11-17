@@ -19,7 +19,9 @@ Please see the list of available
 [releases](https://github.com/DocNow/hydrator/releases) for OS X, Windows and
 Linux installers.
 
-Note for OS X users. Since the Hydrator has not been
+**Note for OS X users**
+
+Since the Hydrator has not been
 [signed](https://developer.apple.com/developer-id/) the first time you attempt
 to open the Hydrator the start up will be prevented because it's not from a
 Apple developer. To get around this find the Hydrator app in your Applications
