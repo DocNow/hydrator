@@ -1,31 +1,32 @@
-<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/app/images/screencap.png"
+<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/screencap.png"
 /> 
 
 Hydrator is an [Electron] based desktop application for [hydrating] Twitter ID
 datasets. Twitter's Terms of Service do not allow the full JSON for datasets of
 tweets to be distributed to third parties. However they do allow datasets of
 tweet IDs to be shared. Hydrator helps you turn these tweet IDs back into JSON
-from the comfort of your desktop.
+and also CSV from the comfort of your desktop.
 
 If you are interested in learning more please join the DocNow community in
-[Slack], or add an issue ticket here.
+[Slack], or add an issue ticket here. If you would like to explore tweet
+identifier datasets please see the [DocNow
+Catalog](https://www.docnow.io/catalog/) and GWU's
+[TweetSets](https://tweetsets.library.gwu.edu/).
 
-## Prebuilt Versions
+## Install
 
-### v0.0.3 
+Please see the list of available 
+[releases](https://github.com/DocNow/hydrator/releases) for OS X, Windows and
+Linux installers.
 
-This release adds extended tweet functionality.
+Note for OS X users. Since the Hydrator has not been
+[signed](https://developer.apple.com/developer-id/) the first time you attempt
+to open the Hydrator the start up will be prevented because it's not from a
+Apple developer. To get around this find the Hydrator app in your Applications
+folder, control-click on it, select and then click Open. From this point on your
+application should start normally.
 
-* [OS X](https://s3.amazonaws.com/docnow-web/Hydrator-0.0.3.dmg)
-* [Windows](https://s3.amazonaws.com/docnow-web/Hydrator-Setup-0.0.3.exe)
-* [Linux](https://s3.amazonaws.com/docnow-web/Hydrator_0.0.3_amd64.deb)
-
-
-### v0.0.2 
-
-* [OS X](https://s3.amazonaws.com/docnow-web/Hydrator-0.0.2.dmg)
-* [Windows](https://s3.amazonaws.com/docnow-web/Hydrator-Setup-0.0.2.exe)
-* [Linux](https://s3.amazonaws.com/docnow-web/Hydrator_0.0.2_amd64.deb)
+<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/screencap.png">
 
 ## Develop
 
