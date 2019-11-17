@@ -19,14 +19,15 @@ Please see the list of available
 [releases](https://github.com/DocNow/hydrator/releases) for OS X, Windows and
 Linux installers.
 
-**Note for OS X users**
+**Note for OS X Users**
 
 Since the Hydrator has not been
-[signed](https://developer.apple.com/developer-id/) the first time you attempt
-to open the Hydrator the start up will be prevented because it's not from a
-Apple developer. To get around this find the Hydrator app in your Applications
-folder, control-click on it, select and then click Open. From this point on your
-application should start normally.
+[signed](https://developer.apple.com/developer-id/) your initial start up of the
+Hydrator will be prevented, because the disk image has not been signed by a
+registered Apple developer. You can convince OS X to open it anyway by locating
+the Hydrator app in your *Applications* folder, control-clicking on it,
+selecting and then clicking *Open* (see the screenshot below). From this point
+on your Hydrator should start normally.
 
 <img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/osx-open.png">
 
