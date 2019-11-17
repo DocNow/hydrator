@@ -26,7 +26,7 @@ Apple developer. To get around this find the Hydrator app in your Applications
 folder, control-click on it, select and then click Open. From this point on your
 application should start normally.
 
-<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/screencap.png">
+<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/osx-open.png">
 
 ## Develop
 
