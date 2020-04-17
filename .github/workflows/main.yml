@@ -16,8 +16,12 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 12.16
+      - name: yarn
+        run: npm install -g yarn
+      - name: install
+        run: yarn install
       - name: build
-        run: npm run pack:mac
+        run: yarn run pack:mac
       - name: see-directory
         run: ls
 
@@ -30,7 +34,11 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 12.16
+      - name: install
+        run: npm install -g yarn
+      - name: install
+        run: yarn install
       - name: build
-        run: npm run pack:win
+        run: yarn run pack:win
       - name: see-directory
         run: ls
