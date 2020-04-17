@@ -24,7 +24,7 @@ jobs:
         with:
           ref: master
       - uses: actions/setup-node@master
-          with:
-            node-version: 12.16
+        with:
+          node-version: 12.16
       - name: see-directory
         run: ls
