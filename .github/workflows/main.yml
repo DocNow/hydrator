@@ -6,6 +6,7 @@ on:
       - master
 
 jobs:
+
   mac:
     runs-on: macOS-latest
     steps:
@@ -15,8 +16,11 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 12.16
+      - name: build
+        run: npm run pack:mac
       - name: see-directory
-        run: ls 
+        run: ls
+
   win:
     runs-on: windows-2016
     steps:
@@ -26,5 +30,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: 12.16
+      - name: build
+        run: npm run pack:win
       - name: see-directory
         run: ls
