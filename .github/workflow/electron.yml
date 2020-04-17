@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  mac:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          ref: master
+      - uses: actions/setup-node@master
+        with:
+          node-version: 12.16
+      - name: see-directory
+        run: ls 
+  win:
+    runs-on: windows-2016
+    steps:
+      - uses: actions/checkout@master
+        with:
+          ref: master
+      - uses: actions/setup-node@master
+          with:
+            node-version: 12.16
+      - name: see-directory
+        run: ls

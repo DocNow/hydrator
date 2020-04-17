@@ -1,0 +1,42 @@
+body {
+  position: relative;
+  height: 85vh;
+  font-size: 14pt;
+  font-family: Arial, Helvetica, Helvetica Neue;
+}
+
+#content {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 80px;
+}
+
+summary {
+  font-weight: bold;
+}
+
+details {
+  margin-bottom: 10px;
+}
+
+form {
+  padding: 5px; 
+}
+
+label {
+  font-weight: bold;
+}
+
+input {
+  font-size: 14pt;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+input[type="file"] { 
+  font-size: 14pt;
+}
+
+button {
+  font-size: 100%;
+}
