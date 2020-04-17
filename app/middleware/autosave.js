@@ -1,9 +1,0 @@
-import { ipcRenderer } from 'electron'
-
-// middleware to save state after every action
-
-export default store => next => action => {
-  let result = next(action)
-  ipcRenderer.send('autosave', store.getState())
-  return result
-}
