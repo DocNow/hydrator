@@ -34,6 +34,7 @@ win:
   target: nsis
 
 linux:
+  icon: images/app.png
   target:
     - deb
     - AppImage
