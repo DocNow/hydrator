@@ -15,8 +15,8 @@ and GWU's [TweetSets](https://tweetsets.library.gwu.edu/).
 ## Install
 
 Please see the list of available 
-[releases](https://github.com/DocNow/hydrator/releases) for OS X, Windows and
-Linux installers.
+[releases](https://github.com/DocNow/hydrator/releases) for OS X, Windows and Linux 
+installers.
 
 **Note for OS X Users**
 
