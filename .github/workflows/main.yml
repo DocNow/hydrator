@@ -1,48 +1,26 @@
-name: CI
+name: Build/release
 
-on:
-  push:
-    branches:
-      - master
+on: push
 
 jobs:
+  release:
+    runs-on: ${{ matrix.os }}
 
-  mac:
-    runs-on: macOS-latest
-    steps:
-      - uses: actions/checkout@master
-        with:
-          ref: master
-      - uses: actions/setup-node@master
-        with:
-          node-version: 12.16
-      - name: yarn
-        run: npm install -g yarn
-      - name: install
-        run: yarn install
-      - name: build
-        run: yarn run pack:mac
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: see-directory
-        run: ls
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest, windows-latest]
 
-  win:
-    runs-on: windows-2016
     steps:
-      - uses: actions/checkout@master
+      - name: Check out Git repository
+        uses: actions/checkout@v1
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v1
         with:
-          ref: master
-      - uses: actions/setup-node@master
+          node-version: 12
+
+      - name: Build/release Electron app
+        uses: samuelmeuli/action-electron-builder@v1
         with:
-          node-version: 12.16
-      - name: install
-        run: npm install -g yarn
-      - name: install
-        run: yarn install
-      - name: build
-        run: yarn run pack:win
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: see-directory
-        run: ls
+          github_token: ${{ secrets.github_token }}
+          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
