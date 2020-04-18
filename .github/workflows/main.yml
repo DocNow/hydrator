@@ -22,6 +22,8 @@ jobs:
         run: yarn install
       - name: build
         run: yarn run pack:mac
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: see-directory
         run: ls
 
@@ -40,5 +42,7 @@ jobs:
         run: yarn install
       - name: build
         run: yarn run pack:win
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: see-directory
         run: ls
