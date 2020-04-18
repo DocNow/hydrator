@@ -1,6 +1,8 @@
 <img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/screencap.png"
 /> 
 
+![Build & Release](https://github.com/docnow/hydrator/workflows/Build%20&%20Release/badge.svg)
+
 Hydrator is an [Electron] based desktop application for [hydrating] Twitter ID
 datasets. Twitter's Terms of Service do not allow the full JSON for datasets of
 tweets to be distributed to third parties. However they do allow datasets of
