@@ -9,9 +9,8 @@ and also CSV from the comfort of your desktop.
 
 If you are interested in learning more please join the DocNow community in
 [Slack], or add an issue ticket here. If you would like to explore tweet
-identifier datasets please see the [DocNow
-Catalog](https://www.docnow.io/catalog/) and GWU's
-[TweetSets](https://tweetsets.library.gwu.edu/).
+identifier datasets please see the [DocNow Catalog](https://catalog.docnow.io)
+and GWU's [TweetSets](https://tweetsets.library.gwu.edu/).
 
 ## Install
 
