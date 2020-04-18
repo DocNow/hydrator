@@ -58,6 +58,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "develop": "gulp develop",
+    "build": "gulp build",
     "test": "electron-mocha --renderer -R spec --require @babel/register test/**/*.spec.js",
     "lint": "eslint --no-ignore tasks app test *.js",
     "format": "npm run private:format -- --write",
