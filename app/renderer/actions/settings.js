@@ -1,6 +1,6 @@
 import TwitterPinAuth from 'twitter-pin-auth'
 
-const remote = require('electron').remote
+import { ipcRenderer } from 'electron'
 
 export const ADD_SETTINGS = 'ADD_SETTINGS'
 export const GET_TWITTER_AUTH_URL = 'GET_TWITTER_AUTH_URL'
@@ -17,13 +17,14 @@ export const UNSET_SETTINGS_READY = 'UNSET_SETTINGS_READY'
 export const CONSK = 'J2Rx3kNtBe1NwTOffGDRtiTnx'
 export const CONSS = 'guF3efhWLWrlHkMuOu7Ff4cZk1yhyfjdIjuRfjP0YKS4seRAiR'
 
-let twitterPinAuth = new TwitterPinAuth(CONSK, CONSS)
+const twitterPinAuth = new TwitterPinAuth(CONSK, CONSS)
 
 export function getTwitterAuthUrl() {
   return function(dispatch) {
     twitterPinAuth.requestAuthUrl().
       then(function(url) {
-        remote.shell.openExternal(url)
+        ipcRenderer.send('openUrl', {url: url})
+        // remote.shell.openExternal(url)
         dispatch(setTwitterAuthUrl(url))
         dispatch(settingsReady())
       }).catch(function(err){ 

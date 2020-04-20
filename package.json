@@ -1,6 +1,6 @@
 {
   "name": "hydrator",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A desktop utility to hydrate Twitter ID datasets.",
   "main": "init.js",
   "author": {

@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { app, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
+import { app, shell, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
 import storage from 'electron-json-storage'
 import { toCsv } from '../utils/twitter'
 
@@ -128,6 +128,10 @@ app.on('ready', async () => {
       .catch(function(err) {
         console.log("error during csv writing", err)
       })
+  })
+
+  ipcMain.on('openUrl', (event, arg) => {
+    shell.openExternal(arg.url)
   })
 
   if (isDevelopment) {
