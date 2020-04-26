@@ -3,22 +3,16 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { ipcRenderer } from 'electron'
-import { heartbeat } from './actions/dataset'
-import configureStore from './store'
 import { createBrowserHistory } from 'history'
+import { GET_SAVED_STORE } from  './actions/settings'
 
+import configureStore from './store'
 import App from './containers/App'
 
-// import './app.global.css';
-
 const history = createBrowserHistory()
-const savedStore = ipcRenderer.sendSync('getSavedStore')
-console.log("got Store", savedStore)
-
+const savedStore = ipcRenderer.sendSync(GET_SAVED_STORE)
+console.log('got initial state', savedStore)
 const store = configureStore(savedStore, history);
-
-// start the heartbeat
-setInterval(() => store.dispatch(heartbeat()), 500)
 
 if (module.hot) {
   module.hot.accept()

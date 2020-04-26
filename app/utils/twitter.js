@@ -21,45 +21,7 @@ export function checkTweetIdFile(path) {
     })
 }
 
-export function hydrateTweets(inputPath, outputPath, auth, startLine=0, endLine=100) {
-  return readTweetIds(inputPath, startLine, endLine)
-    .then(function(tweetIds) {
-      return fetchTweets(tweetIds, auth)
-    })
-    .then(function(result) {
-      return writeTweets(result.tweetIds, result.tweets, outputPath)
-    })
-    .catch(error => {
-      console.log("hydrateTweets error", error)
-    })
-}
-
-function readTweetIds(inputPath, startLine, endLine) {
-  return new Promise(
-    function(resolve, reject) {
-      var pos = 0
-      var lines = []
-      var input = fs.createReadStream(inputPath)
-      var linereader = createInterface({input: input})
-      linereader.on('line', function(line) {
-        if (pos >= startLine && pos < endLine) {
-          lines.push(line.toString())
-        } 
-        if (pos == endLine) {
-          linereader.close()
-        }
-        pos += 1
-      })
-      linereader.on('close', function() {
-        resolve(lines)
-        input.close()
-        lines = linereader = null
-      })
-    }
-  )
-}
-
-function fetchTweets(tweetIds, auth) {
+export function fetchTweets(tweetIds, auth) {
   var twitter = Twit({
     consumer_key: auth.consumer_key,
     consumer_secret: auth.consumer_secret,
@@ -73,47 +35,23 @@ function fetchTweets(tweetIds, auth) {
         .then(function(response) {
           var headers = response.resp.headers
           if (headers['x-rate-limit-remaining'] < 1) {
-            var error = {
+            const error = {
               message: "Rate limit exceeded",
               reset: headers['x-rate-limit-reset']
             }
             reject(error)
           }
           else if (response.data.errors) {
-            var error = response.data.errors[0]
+            const error = response.data.errors[0]
             error.reset = headers['x-rate-limit-reset']
             reject(error)
           } else {
             resolve({tweetIds: tweetIds, tweets: response.data})
           }
-          response = null
-          tweetIds = null
-          ids = null
-          twitter = null
         })
         .catch(function(err) {
           reject(err)
         })
-    }
-  )
-}
-
-function writeTweets(tweetIds, tweets, outputPath) {
-  return new Promise(
-    function (resolve, reject) {
-      ipcRenderer.on('savedTweets', (event, arg) => {
-        resolve({
-          idsRead: arg.tweetIds.length,
-          tweetsHydrated: arg.tweets.length
-        })
-      })
-      ipcRenderer.send('saveTweets', {
-        tweetIds: tweetIds,
-        tweets: tweets,
-        outputPath: outputPath
-      })
-      tweetIds = null
-      tweets = null
     }
   )
 }

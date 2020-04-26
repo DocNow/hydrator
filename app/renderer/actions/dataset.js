@@ -11,16 +11,16 @@ export const SET_FILE_CHECK_ERROR = 'SET_FILE_CHECK_ERROR'
 export const PREP_DATASET = 'PREP_DATASET'
 export const START_HYDRATION = 'START_HYDRATION'
 export const STOP_HYDRATION = 'STOP_HYDRATION'
+export const STOPPED_HYDRATION = 'STOPPED_HYDRATION'
+export const FINISH_HYDRATION = 'FINISH_HYDRATION'
 export const SET_OUTPUT_PATH = 'SET_OUTPUT_PATH'
 export const UPDATE_PROGRESS = 'UPDATE_PROGRESS'
 export const SET_RESET_TIME = 'SET_RESET_TIME'
-export const START_HYDRATION_REQUEST = 'START_HYDRATION_REQUEST'
-export const STOP_HYDRATION_REQUEST = 'STOP_HYDRATION_REQUEST'
 export const START_CSV_EXPORT = 'START_CSV_EXPORT'
 export const STOP_CSV_EXPORT = 'STOP_CSV_EXPORT'
 
 import { ipcRenderer } from 'electron'
-import {hydrateTweets, checkTweetIdFile} from '../../utils/twitter'
+import {checkTweetIdFile} from '../../utils/twitter'
 
 export function addDataset(path, numTweetIds, title, creator, publisher, url) {
   return {
@@ -107,17 +107,62 @@ export function prepDataset(event) {
   }
 }
 
-export function startHydration(datasetId) {
+function finishHydration(datasetId) {
   return {
-    type: START_HYDRATION,
+    type: FINISH_HYDRATION,
     datasetId: datasetId
   }
 }
 
+export function startHydration(datasetId) {
+  return function (dispatch, getState) {
+    var state = getState()
+    var dataset = state.datasets.find(d => d.id == datasetId)
+
+    if (dataset) {
+
+      dispatch({
+        type: START_HYDRATION,
+        datasetId: datasetId
+      })
+
+      ipcRenderer.on(FINISH_HYDRATION, (event, arg) => {
+        console.log(`received finishHydration: ${arg.datasetId}`)
+        dispatch(finishHydration(arg.datasetId))
+      })
+
+      ipcRenderer.on(UPDATE_PROGRESS, (event, arg) => {
+        dispatch({
+          type: UPDATE_PROGRESS,
+          datasetId: arg.datasetId,
+          idsRead: arg.idsRead,
+          tweetsHydrated: arg.tweetsHydrated
+        })
+      })
+
+      ipcRenderer.send(START_HYDRATION, {
+        dataset: dataset,
+        auth: {
+          twitterAccessKey: state.settings.twitterAccessKey,
+          twitterAccessSecret: state.settings.twitterAccessSecret
+        }
+      })
+
+    }
+  }
+}
+
 export function stopHydration(datasetId) {
-  return {
-    type: STOP_HYDRATION,
-    datasetId: datasetId
+  return dispatch => {
+    ipcRenderer.send(STOP_HYDRATION, {
+      datasetId
+    })
+    ipcRenderer.on(STOPPED_HYDRATION, (event, arg) => {
+      dispatch({
+        type: STOP_HYDRATION,
+        datasetId: arg.datasetId
+      })
+    })
   }
 }
 
@@ -129,87 +174,10 @@ export function setOutputPath(datasetId, path) {
   }
 }
 
-function startHydrationRequest() {
-  return {
-    type: START_HYDRATION_REQUEST
-  }
-}
-
-function stopHydrationRequest() {
-  return {
-    type: STOP_HYDRATION_REQUEST
-  }
-}
-
-export function hydrate() {
-  return function(dispatch, getState) {
-    var state = getState()
-
-    // only one hydration request at a time
-    if (state.hydrating) {
-      return
-    }
-
-    var eligible = state.datasets.filter((d) => d.hydrating == true && ! d.completed)
-    if (eligible.length == 0) {
-      return
-    }
-
-    dispatch(startHydrationRequest())
-
-    var dataset = eligible[0]
-    var auth = {
-      consumer_key: CONSK,
-      consumer_secret: CONSS,
-      access_token: state.settings.twitterAccessKey,
-      access_token_secret: state.settings.twitterAccessSecret,
-    }
-    var startLine = dataset.idsRead
-    var endLine = startLine + 100
-    console.log("hydrating", dataset.path, startLine, endLine) 
-
-    hydrateTweets(dataset.path, dataset.outputPath, auth, startLine, endLine)
-      .then(function(result) {
-        dispatch(updateProgress(dataset.id, result.idsRead, result.tweetsHydrated))
-        dispatch(stopHydrationRequest())
-      }).catch(function(err) {
-        console.log(err)
-        dispatch(setResetTime(err.reset))
-        dispatch(stopHydrationRequest())
-      })
-  }
-}
-
-export function heartbeat() {
-  return (dispatch, getState) => {
-    var state = getState()
-    var resetTime = state.settings.resetTime;
-    if (resetTime) {
-      var currentTime = new Date().getTime() / 1000 
-      if (state.settings.resetTime - currentTime > 0) {
-        dispatch(hydrate())
-      } else {
-        dispatch(setResetTime(null))
-      }
-    } else {
-      dispatch(hydrate())
-    }
-  }
-}
-
 export function setResetTime(t) {
   return {
     type: SET_RESET_TIME,
     resetTime: t
-  }
-}
-
-export function updateProgress(datasetId, idsRead, tweetsHydrated) {
-  return {
-    type: UPDATE_PROGRESS,
-    datasetId: datasetId,
-    idsRead: idsRead,
-    tweetsHydrated: tweetsHydrated
   }
 }
 
@@ -236,12 +204,11 @@ export function exportCsv(datasetId, csvPath) {
     if (dataset) {
       dispatch(startCsvExport(datasetId, csvPath))
 
-      ipcRenderer.on('savedCsv', (event, arg) => {
-        console.log(`received savedCsv: ${arg.datasetId}`)
+      ipcRenderer.on(STOP_CSV_EXPORT, (event, arg) => {
         dispatch(stopCsvExport(arg.datasetId))
       })
 
-      ipcRenderer.send('saveCsv', {
+      ipcRenderer.send(START_CSV_EXPORT, {
         datasetId: datasetId,
         jsonPath: dataset.outputPath,
         csvPath: csvPath

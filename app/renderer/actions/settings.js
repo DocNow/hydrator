@@ -14,6 +14,10 @@ export const HYDRATOR_SHUTDOWN = 'HYDRATOR_SHUTDOWN'
 export const FACTORY_RESET = 'FACTORY_RESET'
 export const SETTINGS_READY = 'SETTINGS_READY'
 export const UNSET_SETTINGS_READY = 'UNSET_SETTINGS_READY'
+export const GET_SAVED_STORE = 'GET_SAVED_STORE'
+export const AUTOSAVE = 'AUTOSAVE'
+export const OPEN_URL = 'OPEN_URL'
+
 export const CONSK = 'J2Rx3kNtBe1NwTOffGDRtiTnx'
 export const CONSS = 'guF3efhWLWrlHkMuOu7Ff4cZk1yhyfjdIjuRfjP0YKS4seRAiR'
 
@@ -23,7 +27,7 @@ export function getTwitterAuthUrl() {
   return function(dispatch) {
     twitterPinAuth.requestAuthUrl().
       then(function(url) {
-        ipcRenderer.send('openUrl', {url: url})
+        ipcRenderer.send(OPEN_URL, {url: url})
         // remote.shell.openExternal(url)
         dispatch(setTwitterAuthUrl(url))
         dispatch(settingsReady())
