@@ -5683,11 +5683,6 @@ redux-actions@^2.6.5:
     reduce-reducers "^0.4.3"
     to-camel-case "^1.0.0"
 
-redux-localstorage@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/redux-localstorage/-/redux-localstorage-0.4.1.tgz#faf6d719c581397294d811473ffcedee065c933c"
-  integrity sha1-+vbXGcWBOXKU2BFHP/zt7gZckzw=
-
 redux-mock-store@^1.2.2:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/redux-mock-store/-/redux-mock-store-1.5.4.tgz#90d02495fd918ddbaa96b83aef626287c9ab5872"

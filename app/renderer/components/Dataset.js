@@ -83,8 +83,9 @@ const ProgressBar = (props) => {
 
 export default class Dataset extends Component {
   render() {
+
+    // figure out which button to display based on state: start, stop, csv
     let button = null
-    // const defaultPath = this.props.filePath.replace(/^.*[\\/]/, '')
 
     if (this.props.completed) {
       const defaultCsvPath = this.props.path.replace(/\..+$/, '.csv')
@@ -121,6 +122,7 @@ export default class Dataset extends Component {
         }
       }}>Start</StartButton>
     }
+
     return (
       <Container>
         <Title>

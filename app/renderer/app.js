@@ -11,7 +11,6 @@ import App from './containers/App'
 
 const history = createBrowserHistory()
 const savedStore = ipcRenderer.sendSync(GET_SAVED_STORE)
-console.log('got initial state', savedStore)
 const store = configureStore(savedStore, history);
 
 if (module.hot) {

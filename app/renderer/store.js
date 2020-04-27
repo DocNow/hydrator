@@ -1,14 +1,13 @@
 import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
 import { connectRouter, routerMiddleware, push } from 'connected-react-router'
-import persistState from 'redux-localstorage'
 import thunk from 'redux-thunk'
 
 import datasetActions from './actions/dataset'
 import settingsActions from './actions/settings'
 import datasets from './reducers/datasets'
 import settings from  './reducers/settings'
-import hydrating from './reducers/hydrating'
 import newDataset from './reducers/newDataset'
+import autosave from './middleware/autosave'
 
 export default function configureStore(initialState, routerHistory) {
   const router = routerMiddleware(routerHistory)
@@ -23,11 +22,10 @@ export default function configureStore(initialState, routerHistory) {
     router: connectRouter(routerHistory),
     datasets,
     newDataset,
-    settings,
-    hydrating,
+    settings
   }
 
-  const middlewares = [thunk, router]
+  const middlewares = [thunk, router, autosave]
 
   const composeEnhancers = (() => {
     const compose_ = window && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -37,7 +35,8 @@ export default function configureStore(initialState, routerHistory) {
     return compose
   })()
 
-  const enhancer = composeEnhancers(applyMiddleware(...middlewares), persistState())
+  // const enhancer = composeEnhancers(applyMiddleware(...middlewares), persistState())
+  const enhancer = composeEnhancers(applyMiddleware(...middlewares))
   const rootReducer = combineReducers(reducers)
 
   return createStore(rootReducer, initialState, enhancer)

@@ -5,7 +5,7 @@ import { app, shell, crashReporter, BrowserWindow, Menu, ipcMain } from 'electro
 import storage from 'electron-json-storage'
 import { toCsv } from '../utils/twitter'
 
-import { GET_SAVED_STORE, SAVE, OPEN_URL } from '../renderer/actions/settings'
+import { GET_SAVED_STORE, SAVE, OPEN_URL, AUTOSAVE } from '../renderer/actions/settings'
 import { START_CSV_EXPORT, STOP_CSV_EXPORT, 
          START_HYDRATION, STOP_HYDRATION, STOPPED_HYDRATION, 
          UPDATE_PROGRESS, FINISH_HYDRATION } from '../renderer/actions/dataset'
@@ -90,6 +90,7 @@ app.on('ready', async () => {
       app.on('before-quit', () => {
         forceQuit = true
       })
+
     } else {
       mainWindow.on('closed', () => {
         mainWindow = null
@@ -199,9 +200,17 @@ app.on('ready', async () => {
   })
 
   ipcMain.on(STOP_HYDRATION, async (event, arg) => {
-    console.log('stop hydrating: ', JSON.stringify(arg))
     activeHydrators.delete(arg.datasetId)
     event.sender.send(STOPPED_HYDRATION, {datasetId: arg.datasetId})
+  })
+
+  ipcMain.on(AUTOSAVE, (event, arg) => {
+    storage.set('state', arg, (error) => {
+      if (error) {
+        console.log(error)
+        throw error
+      }
+    })
   })
 
   if (isDevelopment) {
