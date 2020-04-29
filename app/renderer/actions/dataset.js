@@ -1,5 +1,3 @@
-import {CONSK, CONSS} from './settings'
-
 export const ADD_DATASET = 'ADD_DATASET'
 export const DELETE_DATASET = 'DELETE_DATASET'
 export const CHOOSE_FILE = 'CHOOSE_FILE'
@@ -127,7 +125,6 @@ export function startHydration(datasetId) {
       })
 
       ipcRenderer.on(FINISH_HYDRATION, (event, arg) => {
-        console.log(`received finishHydration: ${arg.datasetId}`)
         dispatch(finishHydration(arg.datasetId))
       })
 

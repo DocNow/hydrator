@@ -1,13 +1,7 @@
 import { combineReducers } from 'redux'
 
-import {
-  ADD_SETTINGS,  GET_TWITTER_AUTH_URL, SET_TWITTER_AUTH_URL, UNSET_TWITTER_AUTH_URL,
-  SET_TWITTER_PIN, GET_TWITTER_CREDENTIALS, SET_TWITTER_CREDENTIALS, FACTORY_RESET,
-  SETTINGS_READY, UNSET_SETTINGS_READY
-} from '../actions/settings'
-
-import {SET_RESET_TIME} from '../actions/dataset'
-
+import { SET_RESET_TIME } from '../actions/dataset'
+import { ADD_SETTINGS, AUTHORIZE, INVALID_PIN, SET_TWITTER_CREDENTIALS, FACTORY_RESET } from '../actions/settings'
 
 export default function settings(state = {}, action) {
 
@@ -17,30 +11,35 @@ export default function settings(state = {}, action) {
       return {
         ...state,
         twitterAccessKey: state.twitterAccessKey,
-        twitterAccessSecret: state.twitterAccessSecret
+        twitterAccessSecret: state.twitterAccessSecret,
+        authorize: false,
+        invalidPin: false
       }
     }
 
-    case SET_TWITTER_AUTH_URL: {
+    case AUTHORIZE: {
       return {
         ...state,
-        twitterAuthUrl: action.twitterAuthUrl
+        authorize: true,
+        invalidPin: false
       }
     }
 
-    case UNSET_TWITTER_AUTH_URL: {
+    case INVALID_PIN: {
       return {
         ...state,
-        twitterAuthUrl: null
+        authorize: false,
+        invalidPin: true
       }
     }
 
     case SET_TWITTER_CREDENTIALS: {
       return {
         ...state,
+        authorize: false,
+        invalidPin: false,
         twitterAccessKey: action.twitterAccessKey,
         twitterAccessSecret: action.twitterAccessSecret,
-        twitterAuthUrl: null
       }
     }
 
@@ -53,20 +52,6 @@ export default function settings(state = {}, action) {
 
     case FACTORY_RESET: {
       return {}
-    }
-
-    case SETTINGS_READY: {
-      return {
-        ...state,
-        ready: true
-      } 
-    } 
-
-    case UNSET_SETTINGS_READY: {
-      return {
-        ...state,
-        ready: false
-      }
     }
 
     default: {

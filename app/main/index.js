@@ -3,9 +3,10 @@ import fs, { WriteStream } from 'fs'
 import readline from 'readline'
 import { app, shell, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
 import storage from 'electron-json-storage'
-import { toCsv } from '../utils/twitter'
+import TwitterPinAuth from 'twitter-pin-auth'
 
-import { GET_SAVED_STORE, SAVE, OPEN_URL, AUTOSAVE } from '../renderer/actions/settings'
+import { toCsv } from '../utils/twitter'
+import { GET_SAVED_STORE, SAVE, OPEN_URL, AUTOSAVE, AUTHORIZE, SEND_PIN } from '../renderer/actions/settings'
 import { START_CSV_EXPORT, STOP_CSV_EXPORT, 
          START_HYDRATION, STOP_HYDRATION, STOPPED_HYDRATION, 
          UPDATE_PROGRESS, FINISH_HYDRATION } from '../renderer/actions/dataset'
@@ -16,6 +17,7 @@ let mainWindow = null
 let forceQuit = false
 
 const activeHydrators = new Map()
+const twitterPinAuth = new TwitterPinAuth("TWITTER_CONSUMER_KEY", "TWITTER_CONSUMER_SECRET")
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer')
@@ -25,7 +27,7 @@ const installExtensions = async () => {
     try {
       await installer.default(installer[name], forceDownload)
     } catch (e) {
-      console.log(`Error installing ${name} extension: ${e.message}`)
+      console.error(`Error installing ${name} extension: ${e.message}`)
     }
   }
 }
@@ -106,19 +108,36 @@ app.on('ready', async () => {
           dataset.hydrating = false
         }
       }
-      console.log('sending state', JSON.stringify(data, null, 2))
       event.returnValue = data
     })
   })
 
   ipcMain.on(SAVE, (event, store) => {
-    console.log('saving state')
     storage.set('state', store, (error) => {
       if (error) {
-        console.log(error)
+        console.error(error)
         throw error
       }
     })
+  })
+
+  ipcMain.on(AUTHORIZE, () => {
+    twitterPinAuth.requestAuthUrl().
+      then(url => {
+        shell.openExternal(url)
+      }).catch(err => { 
+        console.error(err)
+      })
+  })
+
+  ipcMain.on(SEND_PIN, (event, arg) => {
+    twitterPinAuth.authorize(arg.pin)
+      .then(credentials => {
+        event.returnValue = credentials
+      }).catch(err => {
+        console.error(err)
+        event.returnValue = null
+      })
   })
 
   ipcMain.on(START_CSV_EXPORT, (event, arg) => {
@@ -129,16 +148,11 @@ app.on('ready', async () => {
         })
       })
       .catch(function(err) {
-        console.log("error during csv writing", err)
+        console.error("error during csv writing", err)
       })
   })
 
-  ipcMain.on(OPEN_URL, (event, arg) => {
-    shell.openExternal(arg.url)
-  })
-
   ipcMain.on(START_HYDRATION, async (event, arg) => {
-    console.log('start hydrating', JSON.stringify(arg))
     activeHydrators.set(arg.dataset.id, true)
 
     let idsRead = arg.dataset.idsRead
@@ -207,7 +221,7 @@ app.on('ready', async () => {
   ipcMain.on(AUTOSAVE, (event, arg) => {
     storage.set('state', arg, (error) => {
       if (error) {
-        console.log(error)
+        console.error(error)
         throw error
       }
     })

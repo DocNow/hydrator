@@ -1,80 +1,37 @@
-import TwitterPinAuth from 'twitter-pin-auth'
-
 import { ipcRenderer } from 'electron'
 
 export const ADD_SETTINGS = 'ADD_SETTINGS'
-export const GET_TWITTER_AUTH_URL = 'GET_TWITTER_AUTH_URL'
-export const SET_TWITTER_AUTH_URL = 'SET_TWITTER_AUTH_URL'
-export const UNSET_TWITTER_AUTH_URL = 'UNSET_TWITTER_AUTH_URL'
-export const SET_TWITTER_PIN = 'SET_TWITTER_PIN'
-export const GET_TWITTER_CREDENTIALS = 'GET_TWITTER_CREDENTIALS'
+export const AUTHORIZE = 'AUTHORIZE'
+export const SET_PIN = 'SET_PIN'
+export const SEND_PIN = 'SET_TWITTER_PIN'
+export const INVALID_PIN = 'INVALID_PIN'
 export const SET_TWITTER_CREDENTIALS = 'SET_TWITTER_CREDENTIALS'
 export const HYDRATOR_STARTUP = 'HYDRATOR_STARTUP'
 export const HYDRATOR_SHUTDOWN = 'HYDRATOR_SHUTDOWN'
 export const FACTORY_RESET = 'FACTORY_RESET'
-export const SETTINGS_READY = 'SETTINGS_READY'
-export const UNSET_SETTINGS_READY = 'UNSET_SETTINGS_READY'
 export const GET_SAVED_STORE = 'GET_SAVED_STORE'
 export const AUTOSAVE = 'AUTOSAVE'
 export const OPEN_URL = 'OPEN_URL'
 
-export const CONSK = 'J2Rx3kNtBe1NwTOffGDRtiTnx'
-export const CONSS = 'guF3efhWLWrlHkMuOu7Ff4cZk1yhyfjdIjuRfjP0YKS4seRAiR'
-
-const twitterPinAuth = new TwitterPinAuth(CONSK, CONSS)
-
-export function getTwitterAuthUrl() {
-  return function(dispatch) {
-    twitterPinAuth.requestAuthUrl().
-      then(function(url) {
-        ipcRenderer.send(OPEN_URL, {url: url})
-        // remote.shell.openExternal(url)
-        dispatch(setTwitterAuthUrl(url))
-        dispatch(settingsReady())
-      }).catch(function(err){ 
-        console.error(err)
-      })
-  }
-}
-
-export function setTwitterAuthUrl(url) {
+export function authorize() {
+  ipcRenderer.send(AUTHORIZE)
   return {
-    type: SET_TWITTER_AUTH_URL,
-    twitterAuthUrl: url
-  }
-}
-
-export function unsetTwitterAuthUrl() {
-  return {
-    type: UNSET_TWITTER_AUTH_URL
-  }
-}
-
-export function setTwitterPin(pin) {
-  return {
-    type: SET_TWITTER_PIN,
-    twitterPin: pin
+    type: AUTHORIZE
   }
 }
 
 export function getTwitterCredentials(pin) {
-  return function(dispatch) {
-    twitterPinAuth.authorize(pin)
-      .then(function(credentials) {
-        dispatch(setTwitterCredentials(credentials))
-
-      }).catch(function(err) {
-        console.error(err)
-        dispatch(unsetTwitterAuthUrl())
-      })
-  }
-}
-
-export function setTwitterCredentials(credentials) {
-  return {
-    type: SET_TWITTER_CREDENTIALS,
-    twitterAccessKey: credentials.accessTokenKey,
-    twitterAccessSecret: credentials.accessTokenSecret
+  const credentials = ipcRenderer.sendSync(SEND_PIN, {pin: pin})
+  if (credentials === null) {
+    return {
+      type: INVALID_PIN
+    }
+  } else {
+    return {
+      type: SET_TWITTER_CREDENTIALS,
+      twitterAccessKey: credentials.accessTokenKey,
+      twitterAccessSecret: credentials.accessTokenSecret
+    }
   }
 }
 
@@ -95,16 +52,3 @@ export function factoryReset() {
     type: FACTORY_RESET
   }
 }
-
-export function settingsReady() {
-  return {
-    type: SETTINGS_READY
-  }
-}
-
-export function unsetSettingsReady() {
-  return {
-    type: UNSET_SETTINGS_READY
-  }
-}
-

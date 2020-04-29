@@ -16,15 +16,11 @@ const Reset = styled.button`
   color: red;
 `
 
-export default class Settings extends Component {
+const Error = styled.div`
+  color: red;
+`
 
-  componentWillReceiveProps() {
-    // if they've got their settings ready send them over to add a dataset
-    if (this.props.settings.ready) {
-      this.props.history.push("/add")
-      this.props.unsetSettingsReady()
-    }
-  }
+export default class Settings extends Component {
 
   reset() {
     this.props.factoryReset()
@@ -33,25 +29,32 @@ export default class Settings extends Component {
   render() {
 
     let pin = null
+    let form = null
+    const error = this.props.settings.invalidPin ? 'Invalid PIN' : ''
 
-    if (this.props.settings.twitterAuthUrl) {
-      var form = 
+    if (this.props.settings.authorize) {
+      form = 
         <form onSubmit = {(e) => {
           e.preventDefault()
           this.props.getTwitterCredentials(pin.value)
           }}>
-          <input ref={node => pin = node} name="twitterPin" id="twitterPin" placeholder="PIN" maxLength="7" size="8" type="text" />
+          <input 
+            ref={node => pin = node} 
+            name="twitterPin" 
+            id="twitterPin" 
+            placeholder="PIN" 
+            maxLength="7" 
+            size="8" 
+            type="text" />
           &nbsp; &nbsp; &nbsp;
           <button>Submit PIN</button>
-          &nbsp; &nbsp; &nbsp;
-          <button>Reset</button>
         </form>
     } else {
-      var form = 
+      form = 
         <form onSubmit = {(e) => {
           e.preventDefault()
-          this.props.getTwitterAuthUrl()
-          }}>
+          this.props.authorize()
+        }}>
           <button>Link Twitter Account</button>
         </form>
     }
@@ -75,7 +78,7 @@ export default class Settings extends Component {
         <label htmlFor="accessKeySecret">Access Key Secret:</label>
         <Key>{ this.props.settings.twitterAccessSecret }</Key>
         <br />
-        <br />
+        <Error>{ error }</Error>
         <br />
         <Reset onClick={(e) => this.reset()}>Reset Settings</Reset>
       </Container>
