@@ -33,27 +33,16 @@ function watchImage() {
   )
 }
 
-/*
-function watchEnv() {
-  return watch(
-    ['.env'],
-    series(assets.copyEnv, hotreload.reload)
-  )
-}
-*/
-
 watchMainScripts.displayName = 'watch-main-scripts'
 watchRendererScripts.displayName = 'watch-renderer-scripts'
 watchHtml.displayName = 'watch-html'
 watchCss.displayName = 'watch-css'
 watchImage.displayName = 'watch-image'
-// watchEnv.displayName = 'watch-env'
 
 exports.start = series(
   assets.copyHtml,
   assets.copyCss,
   assets.copyImage,
-  // assets.copyEnv,
   scripts.developBuild,
   hotreload.start,
   electron.start,
