@@ -5,10 +5,9 @@ import { app, shell, crashReporter, BrowserWindow, Menu, ipcMain } from 'electro
 import storage from 'electron-json-storage'
 import TwitterPinAuth from 'twitter-pin-auth'
 
-import { toCsv } from '../utils/twitter'
+import { hydrateToStream, toCsv } from '../utils/twitter'
 import { GET_SAVED_STORE, SAVE, OPEN_URL, AUTOSAVE, AUTHORIZE, SEND_PIN } from '../renderer/actions/settings'
-import { START_CSV_EXPORT, STOP_CSV_EXPORT, 
-         START_HYDRATION, STOP_HYDRATION, STOPPED_HYDRATION, 
+import { START_CSV_EXPORT, STOP_CSV_EXPORT, START_HYDRATION, STOP_HYDRATION, STOPPED_HYDRATION, 
          UPDATE_PROGRESS, FINISH_HYDRATION } from '../renderer/actions/dataset'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
@@ -18,6 +17,8 @@ let forceQuit = false
 
 const activeHydrators = new Map()
 const twitterPinAuth = new TwitterPinAuth("TWITTER_CONSUMER_KEY", "TWITTER_CONSUMER_SECRET")
+
+console.log(`storage location: ${storage.getDefaultDataPath()}`)
 
 const installExtensions = async () => {
   const installer = require('electron-devtools-installer')
@@ -153,64 +154,73 @@ app.on('ready', async () => {
   })
 
   ipcMain.on(START_HYDRATION, async (event, arg) => {
+
+    // flag this dataset as hydrating
     activeHydrators.set(arg.dataset.id, true)
 
-    let idsRead = arg.dataset.idsRead
-    while (true) {
-      if (idsRead >= arg.dataset.numTweetIds) {
-        event.sender.send(FINISH_HYDRATION, {
-          datasetId: arg.dataset.id
-        })
-        break
-      } else if (! activeHydrators.has(arg.dataset.id)) {
-        event.sender.send(STOPPED_HYDRATION, {
-          datasetId: arg.dataset.id
-        })
-        break
-      } else {
-        idsRead += 100
-        event.sender.send(UPDATE_PROGRESS, {
-          datasetId: arg.dataset.id,
-          idsRead: 100, 
-          tweetsHydrated: Math.floor(Math.random() * 100)
-        })
-        await sleep(1000)
-      }
-
+    // collect together the pieces needed for talking to twitter
+    const auth = {
+      consumer_key: "TWITTER_CONSUMER_KEY",
+      consumer_secret: "TWITTER_CONSUMER_SECRET",
+      access_token: arg.auth.twitterAccessKey,
+      access_token_secret: arg.auth.twitterAccessSecret,
     }
 
-    /*
-    var auth = {
-      consumer_key: CONSK,
-      consumer_secret: CONSS,
-      access_token: state.settings.twitterAccessKey,
-      access_token_secret: state.settings.twitterAccessSecret,
-    }
-    
-    const inputStream = fs.createReadStream(event.idsPath)
+    // open the input stream of tweet ids
+    const inputStream = fs.createReadStream(arg.dataset.path)
     const rl = readline.createInterface({
       input: inputStream,
       crlfDelay: Infinity
     })
 
-    const outputStream = fs.createWriteStream(event.jsonPath)
+    // set up the output stream for the json
+    const outputStream = fs.createWriteStream(arg.dataset.outputPath, {flags: 'a'})
+    let idsAlreadyRead = arg.dataset.idsRead
 
-    // accumulate 100 ids at a time
+    // read each line of tweet ids
     let ids = []
+    let pos = 0
+    let stopped = false
+
     for await (const line of rl) {
+      pos += 1
+
+      // skip through the file if we've hydrated some before
+      if (pos < idsAlreadyRead) continue
+
+      // accumulate the tweet ids until there are 100 of them
       ids.push(line.replace(/\n$/, ''))
       if (ids.length == 100) {
-        const tweets = await hydrate(ids)
-        const text = tweets.map(t => JSON.stringify(t)).join('\n')
-        outputStream.write(text)
+        const hydrated = await hydrateToStream(ids, outputStream, auth, event, arg.dataset.id)
         ids = []
-        await sleep(2000)
       }
+
+      // if we've been told to stop break out of the loop
+      if (! activeHydrators.has(arg.dataset.id)) {
+        stopped = true
+        break
+      }
+
     }
-    */
 
-    // FINISH_HYDRATION
+    // hydrate any remaining ids 
+    if (ids.length > 0) {
+      await hydrateToStream(ids, outputStream, auth, event, arg.dataset.id)
+    }
 
+    // send the appropriate message about whey we stopped
+    if (stopped) {
+      event.sender.send(STOPPED_HYDRATION, {
+        datasetId: arg.dataset.id
+      })
+    } else {
+      event.sender.send(FINISH_HYDRATION, {
+        datasetId: arg.dataset.id
+      })
+    }
+
+    inputStream.close()
+    outputStream.close()
   })
 
   ipcMain.on(STOP_HYDRATION, async (event, arg) => {
@@ -248,8 +258,3 @@ app.on('ready', async () => {
   }
 })
 
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-} 

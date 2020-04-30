@@ -79,7 +79,7 @@ export default function dataset(state = [], action) {
 
     case UPDATE_PROGRESS:
       var d = pickDataset(state, action.datasetId)
-      d.dataset.idsRead += action.idsRead,
+      d.dataset.idsRead += action.idsRead
       d.dataset.tweetsHydrated += action.tweetsHydrated
       if (d.dataset.idsRead >= d.dataset.numTweetIds) {
         d.dataset.completed = new Date()

@@ -2,7 +2,7 @@ import fs from 'fs'
 import Twit from 'twit' 
 import {createInterface} from 'readline'
 import csvWriter from 'csv-write-stream'
-import { ipcRenderer } from 'electron'
+import { UPDATE_PROGRESS, SET_RESET_TIME } from '../renderer/actions/dataset'
 
 export function checkTweetIdFile(path) {
   return new Promise(
@@ -19,6 +19,43 @@ export function checkTweetIdFile(path) {
         resolve(count)
       })
     })
+}
+
+/**
+ * This is kind of an awful function with tons of side effects which 
+ * will write hdyrated tweets to an output stream and handle sending
+ * a IPC message.
+ * @param {*} ids a list of tweet ids
+ * @param {*} out an ouptut stream to write hydrated tweets to
+ * @param {*} auth an object containing twitter api credentials
+ * @param {*} event an IPC event object to use to communicate
+ * @param {*} datasetId the datasetId to 
+ */
+export async function hydrateToStream(ids, out, auth, event, datasetId) {
+  try {
+    const tweets = await fetchTweets(ids, auth)
+    const text = tweets.map(t => JSON.stringify(t)).join('\n')
+    out.write(text + "\n")
+    event.sender.send(UPDATE_PROGRESS, {
+      datasetId: datasetId,
+      idsRead: ids.length, 
+      tweetsHydrated: tweets.length
+    })
+    return tweets.length
+  } catch(err) {
+    if (err.reset) {
+      console.log(`rate limited, sleeping for ${err.reset}`)
+      event.sender.send(SET_RESET_TIME, {
+        resetTime: err.reset
+      })
+      await sleep(err.reset)
+      return hydrateToStream(ids, out, auth)
+    } else {
+      // this should never happen
+      console.error(`error during hydration: ${err}`)
+      throw err
+    }
+  }
 }
 
 export function fetchTweets(tweetIds, auth) {
@@ -46,7 +83,7 @@ export function fetchTweets(tweetIds, auth) {
             error.reset = headers['x-rate-limit-reset']
             reject(error)
           } else {
-            resolve({tweetIds: tweetIds, tweets: response.data})
+            resolve(response.data)
           }
         })
         .catch(function(err) {
@@ -215,3 +252,9 @@ function userUrls(t) {
   }
   return null
 }
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+} 
