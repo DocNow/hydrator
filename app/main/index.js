@@ -1,9 +1,9 @@
+import fs from 'fs'
 import path from 'path'
-import fs, { WriteStream } from 'fs'
 import readline from 'readline'
-import { app, shell, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
 import storage from 'electron-json-storage'
 import TwitterPinAuth from 'twitter-pin-auth'
+import { app, shell, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
 
 import { hydrateToStream, toCsv } from '../utils/twitter'
 import { GET_SAVED_STORE, SAVE, AUTOSAVE, AUTHORIZE, SEND_PIN } from '../renderer/actions/settings'
@@ -109,6 +109,10 @@ app.on('ready', async () => {
           dataset.hydrating = false
         }
       }
+      // unset any active resetTime since it may no longer be relevant
+      if (data.settings.resetTime) {
+        data.settings.resetTime = null
+      }
       event.returnValue = data
     })
   })
@@ -174,10 +178,15 @@ app.on('ready', async () => {
       crlfDelay: Infinity
     })
 
+    // this is the number of ids that have already been hydrated
+    let idsAlreadyRead = arg.dataset.idsRead
+
+    // if we've read ids already from the file we need to append
+    let outputMode = idsAlreadyRead > 0 ? 'a' : 'w'
+
     // set up the output stream for the json
     console.log(`writing to ${arg.dataset.outputPath} for ${arg.dataset.id}`)
-    const outputStream = fs.createWriteStream(arg.dataset.outputPath, {flags: 'a'})
-    let idsAlreadyRead = arg.dataset.idsRead
+    const outputStream = fs.createWriteStream(arg.dataset.outputPath, {flags: outputMode})
 
     // read each line of tweet ids
     let ids = []
@@ -188,10 +197,7 @@ app.on('ready', async () => {
       pos += 1
 
       // skip through the file if we've hydrated some before
-      if (pos < idsAlreadyRead) {
-        console.log(`skipping until ${idsAlreadyRead}`)
-        continue
-      }
+      if (pos < idsAlreadyRead) continue
 
       // accumulate the tweet ids until there are 100 of them
       ids.push(line.replace(/\n$/, ''))
