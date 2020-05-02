@@ -24,3 +24,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        env:
+          TWITTER_CONSUMER_KEY: ${{ secrets.twitter_consumer_key }}
+          TWITTER_CONSUMER_SECRET: ${{ secrets.twitter_consumer_secret }}
+
