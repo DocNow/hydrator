@@ -1,3 +1,5 @@
+import {v4 as uuidv4} from 'uuid'
+
 import { ADD_DATASET, DELETE_DATASET, START_HYDRATION, STOPPED_HYDRATION, 
          SET_OUTPUT_PATH, UPDATE_PROGRESS, START_CSV_EXPORT, STOP_CSV_EXPORT } 
     from '../actions/dataset'
@@ -27,10 +29,9 @@ export default function dataset(state = [], action) {
   switch (action.type) {
 
     case ADD_DATASET:
-      let id = state.length + 1
       return [
         {
-          id: id,
+          id: uuidv4(),
           path: action.path,
           outputPath: null,
           title: action.title,
