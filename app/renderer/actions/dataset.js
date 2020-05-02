@@ -18,7 +18,7 @@ export const START_CSV_EXPORT = 'START_CSV_EXPORT'
 export const STOP_CSV_EXPORT = 'STOP_CSV_EXPORT'
 
 import { ipcRenderer } from 'electron'
-import {checkTweetIdFile} from '../../utils/twitter'
+import { checkTweetIdFile } from '../../utils/twitter'
 
 export function addDataset(path, numTweetIds, title, creator, publisher, url) {
   return {
@@ -105,13 +105,6 @@ export function prepDataset(event) {
   }
 }
 
-function finishHydration(datasetId) {
-  return {
-    type: FINISH_HYDRATION,
-    datasetId: datasetId
-  }
-}
-
 export function startHydration(datasetId) {
   return function (dispatch, getState) {
     var state = getState()
@@ -122,19 +115,6 @@ export function startHydration(datasetId) {
       dispatch({
         type: START_HYDRATION,
         datasetId: datasetId
-      })
-
-      ipcRenderer.on(FINISH_HYDRATION, (event, arg) => {
-        dispatch(finishHydration(arg.datasetId))
-      })
-
-      ipcRenderer.on(UPDATE_PROGRESS, (event, arg) => {
-        dispatch({
-          type: UPDATE_PROGRESS,
-          datasetId: arg.datasetId,
-          idsRead: arg.idsRead,
-          tweetsHydrated: arg.tweetsHydrated
-        })
       })
 
       ipcRenderer.send(START_HYDRATION, {
@@ -153,12 +133,6 @@ export function stopHydration(datasetId) {
   return dispatch => {
     ipcRenderer.send(STOP_HYDRATION, {
       datasetId
-    })
-    ipcRenderer.on(STOPPED_HYDRATION, (event, arg) => {
-      dispatch({
-        type: STOP_HYDRATION,
-        datasetId: arg.datasetId
-      })
     })
   }
 }
@@ -184,7 +158,6 @@ export function startCsvExport(datasetId, csvPath) {
     datasetId: datasetId,
     csvPath: csvPath 
   }
-
 }
 
 export function stopCsvExport(datasetId) {
@@ -200,17 +173,11 @@ export function exportCsv(datasetId, csvPath) {
     var dataset = state.datasets.find(d => d.id == datasetId)
     if (dataset) {
       dispatch(startCsvExport(datasetId, csvPath))
-
-      ipcRenderer.on(STOP_CSV_EXPORT, (event, arg) => {
-        dispatch(stopCsvExport(arg.datasetId))
-      })
-
       ipcRenderer.send(START_CSV_EXPORT, {
         datasetId: datasetId,
         jsonPath: dataset.outputPath,
         csvPath: csvPath
       })
-
     }
   }
 }

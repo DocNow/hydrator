@@ -11,7 +11,6 @@ export const HYDRATOR_SHUTDOWN = 'HYDRATOR_SHUTDOWN'
 export const FACTORY_RESET = 'FACTORY_RESET'
 export const GET_SAVED_STORE = 'GET_SAVED_STORE'
 export const AUTOSAVE = 'AUTOSAVE'
-export const OPEN_URL = 'OPEN_URL'
 
 export function authorize() {
   ipcRenderer.send(AUTHORIZE)

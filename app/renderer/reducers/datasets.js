@@ -1,6 +1,5 @@
-import { ADD_DATASET, DELETE_DATASET, START_HYDRATION, STOP_HYDRATION, 
-         SET_OUTPUT_PATH, FETCH_TWEETS, UPDATE_PROGRESS, START_CSV_EXPORT,
-         STOP_CSV_EXPORT } 
+import { ADD_DATASET, DELETE_DATASET, START_HYDRATION, STOPPED_HYDRATION, 
+         SET_OUTPUT_PATH, UPDATE_PROGRESS, START_CSV_EXPORT, STOP_CSV_EXPORT } 
     from '../actions/dataset'
 
 import { FACTORY_RESET } from '../actions/settings'
@@ -67,7 +66,7 @@ export default function dataset(state = [], action) {
       d.dataset.hydrating = true
       return reducedDatasets(state, d)
 
-    case STOP_HYDRATION:
+    case STOPPED_HYDRATION:
       var d = pickDataset(state, action.datasetId)
       d.dataset.hydrating = false
       return reducedDatasets(state, d)

@@ -29,7 +29,8 @@
     "redux-thunk": "^2.2.0",
     "styled-components": "^5.1.0",
     "twit": "^2.2.11",
-    "twitter-pin-auth": "^0.2.0"
+    "twitter-pin-auth": "^0.2.0",
+    "uuid": "^8.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

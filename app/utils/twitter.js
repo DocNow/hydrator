@@ -4,6 +4,10 @@ import {createInterface} from 'readline'
 import csvWriter from 'csv-write-stream'
 import { UPDATE_PROGRESS, SET_RESET_TIME } from '../renderer/actions/dataset'
 
+/**
+ * Verify a tweet id file contains numbers, and count the rows.
+ * @param {*} path 
+ */
 export function checkTweetIdFile(path) {
   return new Promise(
     function(resolve, reject) {
@@ -23,8 +27,9 @@ export function checkTweetIdFile(path) {
 
 /**
  * This is kind of an awful function with tons of side effects which 
- * will write hdyrated tweets to an output stream and handle sending
- * a IPC message.
+ * will write hdyrated tweets for a set of tweet ids to an output stream 
+ * and send messages to the renderer process about its progress or if
+ * it has been rate limited.
  * @param {*} ids a list of tweet ids
  * @param {*} out an ouptut stream to write hydrated tweets to
  * @param {*} auth an object containing twitter api credentials
@@ -44,15 +49,18 @@ export async function hydrateToStream(ids, out, auth, event, datasetId) {
     return tweets.length
   } catch(err) {
     if (err.reset) {
-      console.log(`rate limited, sleeping for ${err.reset}`)
-      event.sender.send(SET_RESET_TIME, {
-        resetTime: err.reset
-      })
-      await sleep(err.reset)
-      return hydrateToStream(ids, out, auth)
+      const millis = err.reset * 1000 - Date.now()
+      const resetTime = new Date(0)
+      resetTime.setUTCSeconds(err.reset)
+      event.sender.send(SET_RESET_TIME, {resetTime: resetTime})
+      console.log(`rate limited, sleeping for ${millis} milliseconds until ${resetTime}`)
+      await sleep(millis)
+      console.log(`woke up to hydrate dataset ${datasetId} some more`)
+      event.sender.send(SET_RESET_TIME, {resetTime: null})
+      return hydrateToStream(ids, out, auth, event, datasetId)
     } else {
-      // this should never happen
-      console.error(`error during hydration: ${err}`)
+      // this hopefully should never happen
+      console.error(`unexpected error during hydration: ${err}`)
       throw err
     }
   }

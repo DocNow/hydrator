@@ -6,9 +6,9 @@ import storage from 'electron-json-storage'
 import TwitterPinAuth from 'twitter-pin-auth'
 
 import { hydrateToStream, toCsv } from '../utils/twitter'
-import { GET_SAVED_STORE, SAVE, OPEN_URL, AUTOSAVE, AUTHORIZE, SEND_PIN } from '../renderer/actions/settings'
+import { GET_SAVED_STORE, SAVE, AUTOSAVE, AUTHORIZE, SEND_PIN } from '../renderer/actions/settings'
 import { START_CSV_EXPORT, STOP_CSV_EXPORT, START_HYDRATION, STOP_HYDRATION, STOPPED_HYDRATION, 
-         UPDATE_PROGRESS, FINISH_HYDRATION } from '../renderer/actions/dataset'
+         FINISH_HYDRATION, DELETE_DATASET } from '../renderer/actions/dataset'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
 
@@ -167,6 +167,7 @@ app.on('ready', async () => {
     }
 
     // open the input stream of tweet ids
+    console.log(`reading from ${arg.dataset.path} for ${arg.dataset.id}`)
     const inputStream = fs.createReadStream(arg.dataset.path)
     const rl = readline.createInterface({
       input: inputStream,
@@ -174,6 +175,7 @@ app.on('ready', async () => {
     })
 
     // set up the output stream for the json
+    console.log(`writing to ${arg.dataset.outputPath} for ${arg.dataset.id}`)
     const outputStream = fs.createWriteStream(arg.dataset.outputPath, {flags: 'a'})
     let idsAlreadyRead = arg.dataset.idsRead
 
@@ -186,12 +188,15 @@ app.on('ready', async () => {
       pos += 1
 
       // skip through the file if we've hydrated some before
-      if (pos < idsAlreadyRead) continue
+      if (pos < idsAlreadyRead) {
+        console.log(`skipping until ${idsAlreadyRead}`)
+        continue
+      }
 
       // accumulate the tweet ids until there are 100 of them
       ids.push(line.replace(/\n$/, ''))
       if (ids.length == 100) {
-        const hydrated = await hydrateToStream(ids, outputStream, auth, event, arg.dataset.id)
+        await hydrateToStream(ids, outputStream, auth, event, arg.dataset.id)
         ids = []
       }
 
@@ -204,7 +209,7 @@ app.on('ready', async () => {
     }
 
     // hydrate any remaining ids 
-    if (ids.length > 0) {
+    if (ids.length > 0 && ! stopped) {
       await hydrateToStream(ids, outputStream, auth, event, arg.dataset.id)
     }
 
@@ -226,6 +231,13 @@ app.on('ready', async () => {
   ipcMain.on(STOP_HYDRATION, async (event, arg) => {
     activeHydrators.delete(arg.datasetId)
     event.sender.send(STOPPED_HYDRATION, {datasetId: arg.datasetId})
+  })
+
+  ipcMain.on(DELETE_DATASET, (event, arg) => {
+    const datasetId = arg.datasetId
+    if (activeHydrators.has(datasetId)) {
+      activeHydrators.delete(arg.datasetId)
+    }
   })
 
   ipcMain.on(AUTOSAVE, (event, arg) => {
