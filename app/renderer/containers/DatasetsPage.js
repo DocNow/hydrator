@@ -1,4 +1,3 @@
-import React, { Component } from 'react'
 import DatasetList from '../components/DatasetList'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -17,6 +16,6 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(DatasetActions, dispatch)
 }
 
-let DecoratedDatasetList = withRouter(DatasetList)
+const DecoratedDatasetList = withRouter(DatasetList)
 
 export default connect(mapStateToProps, mapDispatchToProps)(DecoratedDatasetList)

@@ -38,9 +38,10 @@ class DatasetList extends Component {
   render() {
     var resetMessage = ""
     if (this.props.resetTime) {
+      const t = new Date(this.props.resetTime)
       resetMessage = 
         <RateLimit>
-          {"Rate limit exceeded till " + this.props.resetTime.toTimeString()}
+          {`Rate limited until ${t.toLocaleTimeString()}`}
         </RateLimit>
     }
     return (

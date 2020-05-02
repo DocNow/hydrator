@@ -35,8 +35,9 @@ export function checkTweetIdFile(path) {
  * @param {*} auth an object containing twitter api credentials
  * @param {*} event an IPC event object to use to communicate
  * @param {*} datasetId the datasetId to 
+ * @param {*} tries the number of times the request has been tried 
  */
-export async function hydrateToStream(ids, out, auth, event, datasetId) {
+export async function hydrateToStream(ids, out, auth, event, datasetId, tries=0) {
   try {
     const tweets = await fetchTweets(ids, auth)
     const text = tweets.map(t => JSON.stringify(t)).join('\n')
@@ -59,9 +60,20 @@ export async function hydrateToStream(ids, out, auth, event, datasetId) {
       event.sender.send(SET_RESET_TIME, {resetTime: null})
       return hydrateToStream(ids, out, auth, event, datasetId)
     } else {
-      // this hopefully should never happen
-      console.error(`unexpected error during hydration: ${err}`)
-      throw err
+      console.log(JSON.stringify(err))
+      const maxTries = 12
+      // this hopefully should only happen when we hit a network error
+      if (tries < maxTries) {
+        // the last try should wait almost an hour
+        const millis = (2 ** tries) * 10000
+        console.error(`unexpected error during hydration: ${err}, sleeping ${millis}`)
+        await sleep(millis)
+        return hydrateToStream(ids, out, auth, event, datasetId, tries + 1)
+      } else {
+        console.log(`unexpected error after ${maxTries} tries`)
+        console.log(JSON.stringify(err))
+        throw err
+      }
     }
   }
 }
@@ -76,26 +88,48 @@ export function fetchTweets(tweetIds, auth) {
   var ids = tweetIds.join(',')
   return new Promise(
     function(resolve, reject) {
-      twitter.post('/statuses/lookup', {id: ids, tweet_mode: 'extended'})
+      twitter.post('statuses/lookup', {id: ids, tweet_mode: 'extended'})
         .then(function(response) {
+
+          // if we are on our last request stop now
           var headers = response.resp.headers
-          if (headers['x-rate-limit-remaining'] < 1) {
+          if (headers['x-rate-limit-remaining'] < 1 && headers['x-rate-limit-reset']) {
             const error = {
               message: "Rate limit exceeded",
               reset: headers['x-rate-limit-reset']
             }
             reject(error)
           }
-          else if (response.data.errors) {
-            const error = response.data.errors[0]
-            error.reset = headers['x-rate-limit-reset']
-            reject(error)
-          } else {
+
+          // return the tweets!
+          else {
             resolve(response.data)
           }
         })
-        .catch(function(err) {
-          reject(err)
+
+        // uhoh something went wrong when looking up ids
+        .catch(err => {
+
+          // are we rate limited? look up the reset time
+          if (err.code === 88) {
+            console.log('we have been rate limited, asking Twitter for reset time')
+            twitter.get('application/rate_limit_status', {resources: 'statuses'})
+              .then(response => {
+                reject({
+                  message: "Rate limit exceeded",
+                  reset: response.data.resources.statuses['/statuses/lookup'].reset
+                })
+              })
+              .catch(err => {
+                console.error(`unable to check rate limit: ${err}`)
+                reject({
+                  message: "Error when checking rate limit status",
+                  detail: err
+                })
+            })
+          } else {
+            reject(err)
+          }
         })
     }
   )
