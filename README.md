@@ -14,6 +14,8 @@ If you are interested in learning more please join the DocNow community in
 identifier datasets please see the [DocNow Catalog](https://catalog.docnow.io)
 and GWU's [TweetSets](https://tweetsets.library.gwu.edu/).
 
+
+
 ## Install
 
 Please see the list of available 
@@ -55,6 +57,12 @@ Alternatively, create installers for OS X, Windows and Linux:
 
 Hydrator was created using [electron-react-redux-boilerplatee] so check out that
 documentation for more information about commands that are available.
+
+## How to Cite
+
+If you would like to cite this software please use something like the following:
+
+    Documenting the Now. (2020). Hydrator [Computer Software]. Retrieved from https://github.com/docnow/hdyrator
 
 [Electron]: http://electron.atom.io/
 [Slack]: https://docnowteam.slack.com
