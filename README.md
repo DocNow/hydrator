@@ -62,7 +62,7 @@ documentation for more information about commands that are available.
 
 If you would like to cite this software please use something like the following:
 
-    Documenting the Now. (2020). Hydrator [Computer Software]. Retrieved from https://github.com/docnow/hdyrator
+    Documenting the Now. (2020). Hydrator [Computer Software]. Retrieved from https://github.com/docnow/hydrator
 
 [Electron]: http://electron.atom.io/
 [Slack]: https://docnowteam.slack.com
