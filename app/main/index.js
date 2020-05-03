@@ -110,7 +110,7 @@ app.on('ready', async () => {
         }
       }
       // unset any active resetTime since it may no longer be relevant
-      if (data.settings.resetTime) {
+      if (data.settings && data.settings.resetTime) {
         data.settings.resetTime = null
       }
       event.returnValue = data
