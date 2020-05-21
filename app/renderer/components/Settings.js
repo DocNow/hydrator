@@ -99,8 +99,6 @@ export default class Settings extends Component {
         <label htmlFor="accessKeySecret">Access Key Secret</label>
         <Key>{ this.props.settings.twitterAccessSecret }</Key>
         <br />
-        <br />
-        <Reset onClick={(e) => this.reset()}>Reset</Reset>
       </>
     }
 
@@ -119,6 +117,8 @@ export default class Settings extends Component {
         { form }
         <br />
         { settings }
+        <br />
+        <Reset onClick={(e) => this.reset()}>Reset</Reset>
         <br />
         <Error>{ error }</Error>
       </Container>
