@@ -179,10 +179,10 @@ app.on('ready', async () => {
     })
 
     // this is the number of ids that have already been hydrated
-    let idsAlreadyRead = arg.dataset.idsRead
+    const idsAlreadyRead = arg.dataset.idsRead
 
     // if we've read ids already from the file we need to append
-    let outputMode = idsAlreadyRead > 0 ? 'a' : 'w'
+    const outputMode = idsAlreadyRead > 0 ? 'a' : 'w'
 
     // set up the output stream for the json
     console.log(`writing to ${arg.dataset.outputPath} for ${arg.dataset.id}`)
