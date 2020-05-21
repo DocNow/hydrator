@@ -26,6 +26,22 @@ export function checkTweetIdFile(path) {
 }
 
 /**
+ * Returns the Twitter account settings for the supplied keys.
+ * @param {*} auth an object containing Twitter API authentication keys
+ */
+
+export async function getUserSettings(auth) {
+  var twitter = Twit({
+    consumer_key: auth.consumer_key,
+    consumer_secret: auth.consumer_secret,
+    access_token: auth.access_token,
+    access_token_secret: auth.access_token_secret
+  })
+  const resp = await twitter.get('account/settings')
+  return resp.data
+}
+
+/**
  * This is kind of an awful function with tons of side effects which 
  * will write hdyrated tweets for a set of tweet ids to an output stream 
  * and send messages to the renderer process about its progress or if

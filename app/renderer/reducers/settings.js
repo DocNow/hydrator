@@ -12,6 +12,7 @@ export default function settings(state = {}, action) {
         ...state,
         twitterAccessKey: state.twitterAccessKey,
         twitterAccessSecret: state.twitterAccessSecret,
+        twitterScreenName: state.twitterScreenName,
         authorize: false,
         invalidPin: false
       }
@@ -20,7 +21,7 @@ export default function settings(state = {}, action) {
     case AUTHORIZE: {
       return {
         ...state,
-        authorize: true,
+        authorize: action.url,
         invalidPin: false
       }
     }
@@ -40,6 +41,7 @@ export default function settings(state = {}, action) {
         invalidPin: false,
         twitterAccessKey: action.twitterAccessKey,
         twitterAccessSecret: action.twitterAccessSecret,
+        twitterScreenName: action.twitterScreenName,
       }
     }
 

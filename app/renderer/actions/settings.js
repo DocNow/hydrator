@@ -13,9 +13,10 @@ export const GET_SAVED_STORE = 'GET_SAVED_STORE'
 export const AUTOSAVE = 'AUTOSAVE'
 
 export function authorize() {
-  ipcRenderer.send(AUTHORIZE)
+  const url = ipcRenderer.sendSync(AUTHORIZE)
   return {
-    type: AUTHORIZE
+    type: AUTHORIZE,
+    url: url
   }
 }
 
@@ -29,7 +30,8 @@ export function getTwitterCredentials(pin) {
     return {
       type: SET_TWITTER_CREDENTIALS,
       twitterAccessKey: credentials.accessTokenKey,
-      twitterAccessSecret: credentials.accessTokenSecret
+      twitterAccessSecret: credentials.accessTokenSecret,
+      twitterScreenName: credentials.screenName
     }
   }
 }

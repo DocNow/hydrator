@@ -5,7 +5,7 @@ import storage from 'electron-json-storage'
 import TwitterPinAuth from 'twitter-pin-auth'
 import { app, shell, crashReporter, BrowserWindow, Menu, ipcMain } from 'electron'
 
-import { hydrateToStream, toCsv } from '../utils/twitter'
+import { hydrateToStream, toCsv, getUserSettings } from '../utils/twitter'
 import { GET_SAVED_STORE, SAVE, AUTOSAVE, AUTHORIZE, SEND_PIN } from '../renderer/actions/settings'
 import { START_CSV_EXPORT, STOP_CSV_EXPORT, START_HYDRATION, STOP_HYDRATION, STOPPED_HYDRATION, 
          FINISH_HYDRATION, DELETE_DATASET } from '../renderer/actions/dataset'
@@ -126,23 +126,40 @@ app.on('ready', async () => {
     })
   })
 
-  ipcMain.on(AUTHORIZE, () => {
+  ipcMain.on(AUTHORIZE, event => {
     twitterPinAuth.requestAuthUrl().
       then(url => {
+        event.returnValue = url
         shell.openExternal(url)
       }).catch(err => { 
         console.error(err)
       })
   })
 
-  ipcMain.on(SEND_PIN, (event, arg) => {
-    twitterPinAuth.authorize(arg.pin)
-      .then(credentials => {
-        event.returnValue = credentials
-      }).catch(err => {
-        console.error(err)
-        event.returnValue = null
-      })
+  ipcMain.on(SEND_PIN, async (event, arg) => {
+    let result = null
+    try {
+      const credentials = await twitterPinAuth.authorize(arg.pin)
+      if (credentials) {
+        // use keys to get the screenName of the authenticating user
+        const auth = {
+          consumer_key: "TWITTER_CONSUMER_KEY",
+          consumer_secret: "TWITTER_CONSUMER_SECRET",
+          access_token: credentials.accessTokenKey,
+          access_token_secret: credentials.accessTokenSecret
+        }
+        const settings = await getUserSettings(auth)
+        if (settings) {
+          result = {
+            ...credentials,
+            screenName: settings.screen_name
+          }
+        }
+      }
+    } catch(e) {
+      console.error(e)
+    }
+    event.returnValue = result
   })
 
   ipcMain.on(START_CSV_EXPORT, (event, arg) => {

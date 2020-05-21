@@ -5,11 +5,19 @@ const Container = styled.div`
   input {
     width: auto;
   }
+  form {
+    padding: 0px;
+  }
 `
 
 const Key = styled.div`
   overflow-wrap: nowrap; 
   font-size: smaller;
+`
+
+const ScreenName = styled.div`
+  font-size: smaller;
+  color: blue;
 `
 
 const Reset = styled.button`
@@ -18,6 +26,11 @@ const Reset = styled.button`
 
 const Error = styled.div`
   color: red;
+`
+
+const TwitterAuthUrl = styled.div`
+  font-style: italic;
+  font-size: smaller;
 `
 
 export default class Settings extends Component {
@@ -38,6 +51,13 @@ export default class Settings extends Component {
           e.preventDefault()
           this.props.getTwitterCredentials(pin.value)
           }}>
+          <p>
+            Note: If a browser window did not open for you please open this URL in your browser 
+            and follow the instructions to obtain your PIN:
+            <br />
+            <br />
+            <TwitterAuthUrl>{this.props.settings.authorize}</TwitterAuthUrl>
+          </p>
           <input 
             ref={node => pin = node} 
             name="twitterPin" 
@@ -48,6 +68,7 @@ export default class Settings extends Component {
             type="text" />
           &nbsp; &nbsp; &nbsp;
           <button>Submit PIN</button>
+          <br />
         </form>
     } else {
       form = 
@@ -59,28 +80,47 @@ export default class Settings extends Component {
         </form>
     }
 
+    let screenName = ""
+    if (this.props.settings.twitterScreenName) {
+      screenName = <>
+        <label htmlFor="screenName">Twitter Account</label>
+        <ScreenName>@{this.props.settings.twitterScreenName}</ScreenName>
+        <br />
+      </>
+    }
+
+    let settings = ""
+    if (this.props.settings.twitterAccessKey) {
+      settings = <>
+        {screenName}
+        <label htmlFor="accessKey">Access Key</label>
+        <Key>{ this.props.settings.twitterAccessKey }</Key>
+        <br />
+        <label htmlFor="accessKeySecret">Access Key Secret</label>
+        <Key>{ this.props.settings.twitterAccessSecret }</Key>
+        <br />
+        <br />
+        <Reset onClick={(e) => this.reset()}>Reset</Reset>
+      </>
+    }
+
     return (
       <Container>
         <details open>
           <summary>Settings</summary>
           <p>
-          These are your settings that control who you connect
-          to the Twitter API as. You will be directed over to 
-          Twitter to grant your Hydrator application permission to 
-          use your account to retrieve Twitter data.
+          These settings that control who you connect
+          to the Twitter API as. When you click Link Your Twitter Account
+          you will be directed to Twitter to grant your Hydrator 
+          application permission to use your account to retrieve Twitter 
+          data.
           </p>
         </details>
         { form }
         <br />
-        <label htmlFor="accessKey">Access Key:</label>
-        <Key>{ this.props.settings.twitterAccessKey }</Key>
-        <br />
-        <label htmlFor="accessKeySecret">Access Key Secret:</label>
-        <Key>{ this.props.settings.twitterAccessSecret }</Key>
+        { settings }
         <br />
         <Error>{ error }</Error>
-        <br />
-        <Reset onClick={(e) => this.reset()}>Reset Settings</Reset>
       </Container>
     )
   }
