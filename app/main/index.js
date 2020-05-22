@@ -127,11 +127,15 @@ app.on('ready', async () => {
   })
 
   ipcMain.on(AUTHORIZE, event => {
+    console.log(`getting Twitter auth url`)
     twitterPinAuth.requestAuthUrl().
       then(url => {
+        console.log(`got Twitter auth url: ${url}`)
         event.returnValue = url
+        console.log(`opening browser tab at ${url}`)
         shell.openExternal(url)
       }).catch(err => { 
+        console.error('error when getting Twitter auth url')
         console.error(err)
       })
   })
@@ -139,6 +143,7 @@ app.on('ready', async () => {
   ipcMain.on(SEND_PIN, async (event, arg) => {
     let result = null
     try {
+      console.log(`getting access tokens for pin: ${arg.pin}`)
       const credentials = await twitterPinAuth.authorize(arg.pin)
       if (credentials) {
         // use keys to get the screenName of the authenticating user
@@ -157,7 +162,7 @@ app.on('ready', async () => {
         }
       }
     } catch(e) {
-      console.error(e)
+      console.log('error when getting keys and settings', e)
     }
     event.returnValue = result
   })
