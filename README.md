@@ -55,7 +55,7 @@ Alternatively, create installers for OS X, Windows and Linux:
     yarn run pack:win
     yarn run pack:linux
 
-Hydrator was created using [electron-react-redux-boilerplatee] so check out that
+Hydrator was created using [electron-react-redux-boilerplate] so check out that
 documentation for more information about commands that are available.
 
 ## How to Cite
