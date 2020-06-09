@@ -18,11 +18,14 @@ and GWU's [TweetSets](https://tweetsets.library.gwu.edu/).
 
 ## Install
 
-Please see the list of available 
-[releases](https://github.com/DocNow/hydrator/releases) for OS X, Windows and Linux 
-installers.
+### Important!
 
-**Note for OS X Users**
+It is easiest to download a pre-built version of the Hydrator instead of
+building it from source. Please see the list of available
+[releases](https://github.com/DocNow/hydrator/releases) for OS X, Windows and
+Linux installers.
+
+### Note for OS X Users
 
 Since the Hydrator has not been
 [signed](https://developer.apple.com/developer-id/) (which requires us to pay
