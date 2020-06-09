@@ -36,12 +36,22 @@ Hydrator should start normally.
 
 ## Develop
 
+
 Get it:
 
     git clone https://github.com/docnow/hydrator
     cd hydrator
 
-Install:
+Configure:
+
+In order to build the Hydrator you will need to get app keys from Twitter and
+put them in a `.env` file in your project directory. It should look something
+like this:
+
+    TWITTER_CONSUMER_KEY=CHANGEME
+    TWITTER_CONSUMER_SECRET=CHANGEMETOO
+
+Next install the dependencies:
 
     yarn install
 
