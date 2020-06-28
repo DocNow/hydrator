@@ -56,8 +56,10 @@ export async function getUserSettings(auth) {
 export async function hydrateToStream(ids, out, auth, event, datasetId, tries=0) {
   try {
     const tweets = await fetchTweets(ids, auth)
-    const text = tweets.map(t => JSON.stringify(t)).join('\n')
-    out.write(text + "\n")
+    if (tweets.length > 0) {
+      const text = tweets.map(t => JSON.stringify(t)).join('\n')
+      out.write(text + "\n")
+    }
     event.sender.send(UPDATE_PROGRESS, {
       datasetId: datasetId,
       idsRead: ids.length, 
