@@ -174,7 +174,7 @@ export function toCsv(jsonPath, csvPath) {
         'place',
         'possibly_sensitive',
         'retweet_count',
-        'reweet_id',
+        'retweet_id',
         'retweet_screen_name',
         'source',
         'text',
