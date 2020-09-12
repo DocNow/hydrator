@@ -166,6 +166,7 @@ export function toCsv(jsonPath, csvPath) {
         'media',
         'urls',
         'favorite_count',
+        'full_text',
         'id',
         'in_reply_to_screen_name',
         'in_reply_to_status_id',
