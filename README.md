@@ -1,4 +1,4 @@
-<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/screencap.png"
+<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/main/images/screencap.png"
 /> 
 
 [![Build & Release](https://github.com/docnow/hydrator/workflows/Build%20&%20Release/badge.svg)](https://github.com/DocNow/hydrator/actions?query=workflow%3A%22Build+%26+Release%22)
@@ -35,7 +35,7 @@ Hydrator app in your *Applications* folder, control-clicking on it, selecting
 and then clicking *Open* (see the screenshot below). From this point on your
 Hydrator should start normally.
 
-<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/master/images/osx-open.png">
+<img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/main/images/osx-open.png">
 
 ## Develop
 
