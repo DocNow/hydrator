@@ -14,8 +14,6 @@ If you are interested in learning more please join the DocNow community in
 identifier datasets please see the [DocNow Catalog](https://catalog.docnow.io)
 and GWU's [TweetSets](https://tweetsets.library.gwu.edu/).
 
-
-
 ## Install
 
 ### Important!
