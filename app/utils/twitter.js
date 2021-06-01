@@ -224,7 +224,7 @@ function csvRow(t) {
     t.favorite_count,
     t.id_str,
     t.in_reply_to_screen_name,
-    t.in_reply_to_status_id,
+    t.in_reply_to_status_id_str,
     t.in_reply_to_user_id,
     t.lang,
     place(t),
