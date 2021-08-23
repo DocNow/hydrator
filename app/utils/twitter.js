@@ -173,6 +173,7 @@ export function toCsv(jsonPath, csvPath) {
         'lang',
         'place',
         'possibly_sensitive',
+        'quote_id',
         'retweet_count',
         'retweet_id',
         'retweet_screen_name',
@@ -229,11 +230,12 @@ function csvRow(t) {
     t.lang,
     place(t),
     t.possibly_sensitive,
+    t.quoted_status_id_str,
     t.retweet_count,
     retweetId(t),
     retweetScreenName(t),
     t.source,
-    t.full_text,
+    text(t),
     tweetUrl(t),
     u.created_at,
     u.screen_name,
@@ -251,6 +253,14 @@ function csvRow(t) {
     userUrls(t),
     u.verified
   ]
+}
+
+function text(t) {
+  if (t.retweeted_status) {
+    return t.retweeted_status.full_text
+  } else {
+    return t.full_text
+  }
 }
 
 function coordinates(t) {
