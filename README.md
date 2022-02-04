@@ -1,4 +1,4 @@
-# hydrator
+# Hydrator
 
 <img width="800" src="https://raw.githubusercontent.com/docnow/hydrator/main/images/screencap.png"
 /> 
